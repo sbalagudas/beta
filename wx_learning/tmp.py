@@ -1,6 +1,7 @@
 import wx
 from paint import Paint as pt
 import cPickle as pk
+import ControlPanel as CP
 import os
 
 class Frame(wx.Frame):
@@ -9,9 +10,21 @@ class Frame(wx.Frame):
         self.paintWindow = pt(self,-1)
         self.createMenuBar()
         self.filename = ""
+        self.createPanel()
+
+        buttonLeft = wx.Button(self.paintWindow,label="left")
+        buttonRight = wx.Button(self.paintWindow,label="right",pos=buttonLeft.)
+
 
 
         self.wildcard = "banana file (*.banana)|*.banana|All Files (*.*)|*.*"
+    def createPanel(self):
+        controlPanel = CP.ControlPanel(self,-1,self.paintWindow)
+        box = wx.BoxSizer(wx.HORIZONTAL)
+        box.Add(controlPanel,0,wx.EXPAND)
+        box.Add(self.paintWindow,0,wx.EXPAND)
+
+        self.SetSizer(box)
 
     def menuInfo(self):
         return [("&File",(

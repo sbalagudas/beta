@@ -10,12 +10,8 @@ class Frame(wx.Frame):
         self.paintWindow = pt(self,-1)
         self.createMenuBar()
         self.filename = ""
+        #self.buttonLeft = wx.Button(self.paintWindow,label='Left',style=wx.ALIGN_RIGHT)
         self.createPanel()
-
-        buttonLeft = wx.Button(self.paintWindow,label="left")
-        buttonRight = wx.Button(self.paintWindow,label="right",pos=buttonLeft.)
-
-
 
         self.wildcard = "banana file (*.banana)|*.banana|All Files (*.*)|*.*"
     def createPanel(self):
@@ -23,7 +19,7 @@ class Frame(wx.Frame):
         box = wx.BoxSizer(wx.HORIZONTAL)
         box.Add(controlPanel,0,wx.EXPAND)
         box.Add(self.paintWindow,0,wx.EXPAND)
-
+        #box.Add(self.buttonLeft,0,wx.EXPAND)
         self.SetSizer(box)
 
     def menuInfo(self):
@@ -161,8 +157,23 @@ class Frame(wx.Frame):
     def exit(self,event):
         self.Destroy()
 
+class spalshScreen(wx.App):
+    def __init__(self,redirect=False,filename=None):
+        wx.App.__init__(self,redirect,filename)
+
+    def OnInit(self):
+        bmp = wx.Image("d:\\Jellyfish.jpg",wx.BITMAP_TYPE_JPEG).ConvertToBitmap()
+        wx.SplashScreen(bmp,wx.SPLASH_NO_CENTRE|wx.SPLASH_TIMEOUT,10000,None,-1)
+        wx.Yield()
+
+        frame = Frame()
+        frame.Show()
+        self.SetTopWindow(frame)
+        return True
+
 if __name__ == "__main__" :
-    app = wx.PySimpleApp()
-    frame = Frame()
-    frame.Show()
+    #app = wx.PySimpleApp()
+    #frame = Frame()
+    #frame.Show()
+    app = spalshScreen()
     app.MainLoop()

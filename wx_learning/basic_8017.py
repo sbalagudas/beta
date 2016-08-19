@@ -7,34 +7,31 @@ class logInFrame(wx.Frame):
 
         self.paintWindow = wx.Panel(self,-1)
         self.paintWindow.SetBackgroundColour("TURQUOISE")
-
         self.fontBold = wx.Font(18,wx.ROMAN,wx.ITALIC,wx.BOLD)
-        bgColor = self.paintWindow.GetBackgroundColour()
+        self.bgColor = self.paintWindow.GetBackgroundColour()
 
-        self.userNameText = wx.StaticText(self.paintWindow,-1,label="User Name : ",pos=(200,-1),style=wx.ROMAN)
-        self.userNameText.SetFont(self.fontBold)
-        self.userNameInput = wx.TextCtrl(self.paintWindow,-1,size=(200,-1),style=wx.TE_NOHIDESEL|wx.TE_PROCESS_ENTER)
-        self.userNameInput.SetFont(self.fontBold)
-        self.userNameInput.SetBackgroundColour(bgColor)
+        self.createText()
+    def textInfo(self):
+        return [("User Name : ",wx.ROMAN,'static'),
+                (wx.TE_NOHIDESEL,'ctrl'),
+                ("Password : ",wx.ROMAN,'static'),
+                (wx.TE_PASSWORD,'ctrl')]
 
-        self.userPwdText = wx.StaticText(self.paintWindow,-1,label="Password : ",style=wx.ROMAN)
-        self.userPwdText.SetFont(self.fontBold)
-        self.userPwdInput = wx.TextCtrl(self.paintWindow,-1,size=(200,-1),style=wx.TE_PASSWORD|wx.TE_NOHIDESEL)
-        self.userPwdInput.SetBackgroundColour(bgColor)
-        self.userPwdInput.SetFont(self.fontBold)
-
+    def createText(self):
         sizer = wx.FlexGridSizer(cols=2,hgap=6,vgap=6)
-        sizer.AddMany([self.userNameText,self.userNameInput,self.userPwdText,self.userPwdInput])
+        textList = []
+        for eachItem in self.textInfo():
+            if 'static' in eachItem :
+                text = wx.StaticText(self.paintWindow,id=-1,label=eachItem[0],style=eachItem[1])
+                text.SetForegroundColour('BLUE')
+            else :
+                text = wx.TextCtrl(self.paintWindow,id=-1,size=(200,-1),style=eachItem[0])
+                text.SetForegroundColour('BLACK')
+            text.SetFont(self.fontBold)
+            text.SetBackgroundColour(self.bgColor)
+            textList.append(text)
+        sizer.AddMany(textList)
         self.paintWindow.SetSizer(sizer)
-        sizer.Fit(self)
-        #mainSizer = wx.BoxSizer(wx.VERTICAL)
-        #mainSizer.Add(userNameSizer)
-        #mainSizer.Add(userPwdSizer)
-        #self.paintWindow.SetSizer(mainSizer)
-
-        #userNameSizer.Fit(self)
-        #self.SetSizer(userNameSizer)
-
 
 if __name__ == "__main__":
     app = wx.PySimpleApp()

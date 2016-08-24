@@ -14,12 +14,16 @@ class logInPanel(wx.Panel):
         self.bgColor = self.GetBackgroundColour()
 
         self.createLoginButton()
-        textSizer = self.createText()
+        (textSizer,textList) = self.createText()
         self.layout(textSizer)
 
     def createLoginButton(self):
         self.loginBtn = wx.Button(self,label="Log In",size=(100,50))
         self.loginBtn.SetFont(self.fontBold)
+        self.loginBtn.Bind(wx.EVT_BUTTON,self.)
+
+    def loginCheck(self,event,userName,password):
+        if self.
 
     def textInfo(self):
         return [("User Name : ",wx.ROMAN,'static'),
@@ -50,7 +54,7 @@ class logInPanel(wx.Panel):
             textList.append(text)
         sizer.AddMany(textList)
         #self.paintWindow.SetSizer(sizer)
-        return sizer
+        return sizer,textList
 
 class logInFrame(wx.Frame) :
     def __init__(self,parent=None,id=-1,title="log in window"):

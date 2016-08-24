@@ -50,7 +50,7 @@ class ControlPanel(wx.Panel):
         thicknessGrid = wx.GridSizer(cols=self.NUM_COLS,hgap=2,vgap=2)
         for eachThickness in range(1,self.maxThickness+1):
             eachToggleButton = buttons.GenToggleButton(self,-1,str(eachThickness),size=buttonSize)
-            eachToggleButton.SetBezelWidth(1)
+            eachToggleButton.SetBezelWidth(10)
             eachToggleButton.SetUseFocusIndicator(False)
             self.Bind(wx.EVT_BUTTON,self.setThickness,eachToggleButton)
             thicknessGrid.Add(eachToggleButton,0)
@@ -60,6 +60,12 @@ class ControlPanel(wx.Panel):
         return thicknessGrid
 
     def setColor(self,event):
-        pass
+        color = self.colorMap[event.GetId()]
+        if color != self.paint.color :
+            self.colorButtons[self.paint.color].SetToggle(False)
+        self.paint.setColor(color)
     def setThickness(self,event):
-        pass
+        thickness = self.thicknessMap[event.GetId()]
+        if thickness != self.paint.thickness :
+            self.thicknessButtons[self.paint.thickness].SetToggle(False)
+        self.paint.setThickness(thickness)

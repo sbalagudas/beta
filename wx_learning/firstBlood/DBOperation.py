@@ -6,10 +6,10 @@ import enDecryption as ed
 class DBOperation(object) :
     DB_DIR = "d:\\dbTest.db"
     def __init__(self):
-        conn = sql.connect(self.DB_DIR)
-        self.cursor = conn.cursor()
-        #self.createTable('user')
-        #self.createTable('cost')
+        self.conn = sql.connect(self.DB_DIR)
+        self.cursor = self.conn.cursor()
+        self.createTable('user')
+        self.createTable('cost')
 
     def closeConnection(self,conn):
         conn.close()
@@ -42,6 +42,7 @@ class DBOperation(object) :
             insertCommand = "INSERT INTO " + str(tableName) + " (costName,costValue,costDate)" + " values (?,?,?)"
 
         self.cursor.execute(insertCommand,value)
+        self.conn.commit()
 
     def fetchAllData(self,tableName):
         fetchAllCommand = "SELECT * FROM "+tableName
@@ -52,6 +53,14 @@ class DBOperation(object) :
         self.cursor.execute(cmd)
         print "command <%s> executed !"%cmd
         return self.cursor.fetchall()
+    #@classmethod
+    def getBanana(self,key):
+        getBananaCommand = "SELECT password FROM user WHERE userName='"+str(key)+"'"
+        print "command <%s> executed !"%getBananaCommand
+        self.cursor.execute(getBananaCommand)
+        raw = self.cursor.fetchall()
+        print "raw : ",raw
+        return raw
 
 if __name__ == "__main__":
     #pass

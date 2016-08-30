@@ -2,18 +2,19 @@ import sqlite3 as sql
 import time
 import enDecryption as ed
 
-class DBConnection(object):
-    DB_DIR = "d:\\dbTest.db"
-    def createConnection(self):
-        return sql.connect(self.DB_DIR)
-    def closeConnection(self,conn):
-        conn.close()
-    def createCursor(self,conn):
-        return conn.cursor()
 
 class DBOperation(object) :
-    def __init__(self,cursor):
-        self.cursor = cursor
+    DB_DIR = "d:\\dbTest.db"
+    def __init__(self):
+        conn = sql.connect(self.DB_DIR)
+        self.cursor = conn.cursor()
+        #self.createTable('user')
+        #self.createTable('cost')
+
+    def closeConnection(self,conn):
+        conn.close()
+
+
     TBUserInfo = " (userId INTEGER PRIMARY KEY AUTOINCREMENT, " \
                  "userName VARCHAR(20)," \
                  "password VARCHAR(30)," \
@@ -23,7 +24,7 @@ class DBOperation(object) :
                  "costValue FLOAT, " \
                  "costDate DATETIME)"
 
-    def createTable(self,tableName,tableType):
+    def createTable(self,tableName):
         if tableName == 'user' :
             createTBCommand = "CREATE TABLE IF NOT EXISTS "+ str(tableName)+ self.TBUserInfo
         elif tableName == 'cost':
@@ -45,6 +46,7 @@ class DBOperation(object) :
     def fetchAllData(self,tableName):
         fetchAllCommand = "SELECT * FROM "+tableName
         self.cursor.execute(fetchAllCommand)
+        self.cursor.execute(fetchAllCommand)
         return self.cursor.fetchall()
     def customizedFetch(self,cmd):
         self.cursor.execute(cmd)
@@ -52,14 +54,10 @@ class DBOperation(object) :
         return self.cursor.fetchall()
 
 if __name__ == "__main__":
+    #pass
+
     itf = "%Y-%m-%d %H:%M:%S"
-
-    dbc = DBConnection()
-    conn = dbc.createConnection()
-    cur = dbc.createCursor(conn)
-
-
-    dbo = DBOperation(cur)
+    dbo = DBOperation()
 
     userInfo = [('apple','apple123',"2016-01-01 12:12:12"),
                 ('pear','pear123',"2016-01-02 12:12:12"),
@@ -71,17 +69,17 @@ if __name__ == "__main__":
             ('vegetable',22,'2016-01-12 15:15:15'),
             ('lunch',44,'2016-01-13 16:16:16')]
 
-    dbo.createTable('user','user')
-    dbo.createTable('cost','cost')
-    for item in userInfo:
-        dbo.insertData('user',item)
-    r = dbo.fetchAllData('user')
-    print "user information : \n %s"%r
-    print "-------------------------------"
-    for value in values :
-        dbo.insertData('cost',value)
-    c = dbo.fetchAllData('cost')
-    print "cost information : \n %s"%c
+    #dbo.createTable('user')
+    #dbo.createTable('cost')
+    #for item in userInfo:
+    #    dbo.insertData('user',item)
+    #r = dbo.fetchAllData('user')
+    #print "user information : \n %s"%r
+    #print "-------------------------------"
+    #for value in values :
+    #    dbo.insertData('cost',value)
+    #c = dbo.fetchAllData('cost')
+    #print "cost information : \n %s"%c
 
     cmd1 = "SELECT * FROM cost WHERE costDate LIKE '2016-01%'"
     cmd2 = "SELECT * FROM cost WHERE costDate LIKE '2016-01-10%'"
@@ -90,8 +88,9 @@ if __name__ == "__main__":
     b = dbo.customizedFetch(cmd2)
     c = dbo.customizedFetch(cmd3)
     print "a : ",a
-    print "b` : ",b
+    print "b : ",b
     print "c : ",c
+
 
 
 

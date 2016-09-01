@@ -1,8 +1,8 @@
 import wx
 
-class Paint(wx.Window):
-    def __init__(self,parent,ID,pos=(0,0),size=(400,600)):
-        wx.Window.__init__(self,parent,ID,pos,size)
+class Paint(wx.Panel):
+    def __init__(self,parent,ID):
+        wx.Panel.__init__(self,parent,ID)
         self.SetBackgroundColour('White')
         self.color='Black'
         self.thickness = 1
@@ -110,17 +110,17 @@ class Paint(wx.Window):
         print "num : ",num
         self.pen = wx.Pen(self.color,self.thickness,wx.SOLID)
 
-class Frame(wx.Frame):
+class paintFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title='painting...',pos=wx.DefaultPosition,size=(800,600)):
         wx.Frame.__init__(self,parent,id,title,pos,size)
         #self.pt = Paint(self,-1,(0,0),(399,600))
-        self.pt = Paint(self,-1,(0,0))
+        self.pt = Paint(self,-1)
         #self.ptNew = paint(self,-1,(401,0),(399,600))
-        self.thicknessValue = ['1','2','3','4','5']
-        self.colorValue = ['Red','Green','Blue','Purple','Pink']
+        #self.thicknessValue = ['1','2','3','4','5']
+        #self.colorValue = ['Red','Green','Blue','Purple','Pink']
 
-        self.buttonLeft = wx.Button(self.pt,label="left")
-        self.buttonRight = wx.Button(self.pt,label="right",pos=(self.buttonLeft.GetSize()[0]+1,self.buttonLeft.GetPosition()[1]))
+        #self.buttonLeft = wx.Button(self.pt,label="left")
+        #self.buttonRight = wx.Button(self.pt,label="right",pos=(self.buttonLeft.GetSize()[0]+1,self.buttonLeft.GetPosition()[1]))
 
         #self.thick = wx.ComboBox(self.pt,-1,'thickness',(20,20),(100,30),self.thicknessValue,wx.CB_DROPDOWN and wx.CB_READONLY)
         #self.color = wx.ComboBox(self.pt,-1,'color',(140,20),(100,30),self.colorValue,wx.CB_DROPDOWN and wx.CB_READONLY)
@@ -154,13 +154,8 @@ class Frame(wx.Frame):
         newColor = self.color.GetValue()
         self.pt.setColor(newColor)
 
-
-
-
-
-
 if __name__ == '__main__':
     app = wx.PySimpleApp()
-    frame = Frame()
+    frame = paintFrame()
     frame.Show()
     app.MainLoop()

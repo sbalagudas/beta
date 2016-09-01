@@ -1,6 +1,7 @@
 import wx
 import paint as pt
 from DBOperation import DBOperation as dbo
+import time
 
 class logInPanel(wx.Panel):
     #def __init__(self,parent=None,id=-1,title="My Frame"):
@@ -9,10 +10,9 @@ class logInPanel(wx.Panel):
                  parent,
                  ID,
                  pos=wx.DefaultPosition,
-                 size=(600,400),
-                 style=wx.DEFAULT_FRAME_STYLE ^ (wx.RESIZE_BORDER | wx.MINIMIZE_BOX | wx.MAXIMIZE_BOX)):
-        wx.Panel.__init__(self,parent,ID,pos,size,style)
-        self.validation = False
+                 size=(600,400)):
+        wx.Panel.__init__(self,parent,ID,pos,size)
+        self.frame = parent
 
         #self.paintWindow = wx.Panel(self,-1)
 
@@ -71,14 +71,17 @@ class logInPanel(wx.Panel):
 
     def authentication(self,event):
         db = dbo()
-        userName = self.textList[1].GetLabelText()
+        self.userName = self.textList[1].GetLabelText()
         password = self.textList[3].GetLabelText()
-        dbPwd = db.getBanana(userName)
+        dbPwd = db.getBanana(self.userName)
         #need decryption process, will add later.
         if dbPwd :
             if dbPwd[0][0] == password:
                 self.pmt.SetLabel("log in success!")
-                self.validation = True
+                time.sleep(1)
+                self.frame.Destroy()
+                self.paintWindow = pt.paintFrame()
+                self.paintWindow.Show()
         else :
             self.pmt.SetLabel("invalid username or password.")
 
@@ -89,11 +92,7 @@ class loginApp(wx.App):
         self.loginFrame = logInFrame()
         self.SetTopWindow(self.loginFrame)
         self.loginFrame.Show()
-        print "testing......"
-        if not self.loginFrame.panel :
-            self.paintWindow = pt.Frame()
-            self.paintWindow.Show()
-            self.loginFrame.Destroy()
+
         return True
 
 class logInFrame(wx.Frame) :

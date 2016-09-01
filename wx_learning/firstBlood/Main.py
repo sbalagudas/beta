@@ -1,5 +1,6 @@
 import wx
-import login
+import timeDisplay
+from paint import Paint as pt
 import time
 
 class testPanel(wx.Panel):
@@ -12,15 +13,26 @@ class testPanel(wx.Panel):
         self.test = wx.StaticText(self,id=1,label="testing",style=wx.ROMAN)
         time.sleep(1)
         self.test.SetLabel("banana")
-        
+
+
 
 class mainFrame(wx.Frame):
-    def __init__(self,parent=None,id=wx.ID_ANY,title="Banana World"):
-        wx.Frame.__init__(self,parent,id,title)
+    def __init__(self,parent=None,id=wx.ID_ANY,title="Banana World",pos=(0,0),size=(800,600)):
+        wx.Frame.__init__(self,parent,id,title,pos,size)
 
-        #self.panel = testPanel(self,-1)
-        self.panel = wx.Panel(self,-1)
-        self.test = wx.StaticText(self.panel,id=1,label="testing",style=wx.ROMAN)
+        self.panelTime = timeDisplay.timeDisplay(self,-1,'apple')
+        self.panelPaint = pt(self,-1)
+
+        self.layout(self.panelTime,self.panelPaint)
+
+    def layout(self,time,paint):
+
+        mainBox = wx.BoxSizer(wx.VERTICAL)
+        mainBox.Add(time,1,wx.EXPAND)
+        mainBox.Add(paint,5,wx.EXPAND)
+
+        self.SetSizer(mainBox)
+        #mainBox.Fit(self)
 
 
 

@@ -29,7 +29,7 @@ class mainFrame(wx.Frame):
 
         mainBox = wx.BoxSizer(wx.VERTICAL)
         mainBox.Add(time,1,wx.EXPAND)
-        mainBox.Add(paint,5,wx.EXPAND)
+        mainBox.Add(paint,10,wx.EXPAND)
 
         self.SetSizer(mainBox)
         #mainBox.Fit(self)

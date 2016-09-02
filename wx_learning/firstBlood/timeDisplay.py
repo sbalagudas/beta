@@ -1,5 +1,6 @@
 import wx
 import time
+import threading
 from paint import Paint as pt
 
 class timeDisplay(wx.Panel):
@@ -10,8 +11,10 @@ class timeDisplay(wx.Panel):
         self.curUser = curUser
         self.curTime = self.getTimeAndWeek()
 
+        #multi-threading
+        thd = threading.Thread(target=self.refreshTime,args=())
         self.createStaticText()
-        #self.refreshTime()
+        thd.start()
 
     def TextInfo(self):
         week = self.getTimeAndWeek()
@@ -28,23 +31,24 @@ class timeDisplay(wx.Panel):
         for eachItem in self.TextInfo():
             text = wx.StaticText(self,id=-1,label=str(eachItem),style=wx.ROMAN)
             text.SetForegroundColour('Blue')
-            text.SetBackgroundColour(self.titleColorInfo()[i])
+            text.SetBackgroundColour(self.GetBackgroundColour())
+            #text.SetBackgroundColour('White')
             text.SetFont(self.fontBold)
+
             if 1 == i:
-                sizer.Add(text,2,wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL)
+                sizer.Add(text,2,wx.EXPAND)
             else :
-                sizer.Add(text,1,wx.EXPAND|wx.ALIGN_RIGHT)
+                sizer.Add(text,1,wx.EXPAND)
             i += 1
             self.textList.append(text)
         self.SetSizer(sizer)
-        sizer.Fit(self)
+        sizer.Layout()
+        #sizer.Fit(self)
 
     def refreshTime(self):
         while True:
             self.curTime = self.getTimeAndWeek()[0]
-            print "current time : ",self.curTime
-            print "self.textList[3]",self.textList[3]
-            self.textList[3].SetLabel(str(self.curTime))
+            self.textList[1].SetLabel(str(self.curTime))
             time.sleep(1)
 
     def timeZoneLayout(self,greeting,timeBox):

@@ -1,5 +1,6 @@
 import wx
-import paint as pt
+#import paint as pt
+import costPanel as cP
 from DBOperation import DBOperation as dbo
 import time
 
@@ -16,13 +17,13 @@ class logInPanel(wx.Panel):
 
         #self.paintWindow = wx.Panel(self,-1)
 
-        self.SetBackgroundColour("TURQUOISE")
+        #self.SetBackgroundColour("TURQUOISE")
         self.fontBold = wx.Font(18,wx.ROMAN,wx.ITALIC,wx.BOLD)
         self.bgColor = self.GetBackgroundColour()
 
         self.createLoginButton()
         self.createPromptText()
-        (textSizer,self.textList) = self.createText()
+        (textSizer,self.textList) = self.createText(self.textInfo())
         self.layout(textSizer)
 
     def createLoginButton(self):
@@ -52,13 +53,14 @@ class logInPanel(wx.Panel):
         self.SetSizer(boxSizer)
         self.Layout()
 
-    def createText(self):
+    #@classmethod
+    def createText(self,textData):
         sizer = wx.FlexGridSizer(cols=2,hgap=6,vgap=6)
         textList = []
-        for eachItem in self.textInfo():
+        for eachItem in textData:
             if 'static' in eachItem :
                 text = wx.StaticText(self,id=-1,label=eachItem[0],style=eachItem[1])
-                text.SetForegroundColour('BLUE')
+                text.SetForegroundColour('MEDIUM SPRING GREEN')
             else :
                 text = wx.TextCtrl(self,id=-1,size=(200,-1),style=eachItem[0])
                 text.SetForegroundColour('BLACK')
@@ -80,8 +82,9 @@ class logInPanel(wx.Panel):
                 self.pmt.SetLabel("log in success!")
                 time.sleep(1)
                 self.frame.Destroy()
-                self.paintWindow = pt.paintFrame()
-                self.paintWindow.Show()
+                #self.paintWindow = pt.paintFrame()
+                self.cPanel = cP.costFrame()
+                self.cPanel.Show()
         else :
             self.pmt.SetLabel("invalid username or password.")
 

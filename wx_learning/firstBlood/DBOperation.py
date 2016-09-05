@@ -90,6 +90,7 @@ if __name__ == "__main__":
     #c = dbo.fetchAllData('cost')
     #print "cost information : \n %s"%c
 
+
     cmd1 = "SELECT * FROM cost WHERE costDate LIKE '2016-01%'"
     cmd2 = "SELECT * FROM cost WHERE costDate LIKE '2016-01-10%'"
     cmd3 = "SELECT * FROM cost WHERE costDate LIKE '2016-01-10 13:13%'"

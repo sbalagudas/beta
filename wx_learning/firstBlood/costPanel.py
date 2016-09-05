@@ -1,6 +1,7 @@
 #coding=utf-8
 import wx
 import wx.lib.buttons as buttons
+import addCostDetail as adt
 import fonts
 
 class testPanel(wx.Panel):
@@ -21,6 +22,7 @@ class costPanel(wx.Panel):
     def layout(self,costGrid,costButton):
         self.costPanelSizer = wx.BoxSizer(wx.VERTICAL)
         self.costPanelSizer.Add(costGrid,1)
+        self.costPanelSizer.Add((0,16))
         self.costPanelSizer.Add(costButton,1,wx.EXPAND)
         self.SetSizer(self.costPanelSizer)
 
@@ -35,23 +37,27 @@ class costPanel(wx.Panel):
         costGrid = wx.GridSizer(cols=self.COLS_NUM,hgap=5,vgap=5)
         for eachCost in self.costCategory():
             button = buttons.GenToggleButton(self,id=-1,label=eachCost,size=(80,80))
+            self.Bind(wx.EVT_BUTTON,self.callAddCost,button)
             button.SetBezelWidth(3)
             button.SetUseFocusIndicator(False)
             button.SetFont(fonts.Fonts.romanBold14())
             costGrid.Add(button,1)
-        #self.SetSizer(costGrid)
-        #costGrid.Fit(self)
         return costGrid
 
     def createCostButtonGrid(self):
-        costSizer = wx.GridSizer(cols=1,hgap=5)
+        #costSizer = wx.GridSizer(cols=1)
+        costSizer = wx.BoxSizer(wx.VERTICAL)
         for eachData in self.costButtonInfo():
             button  = wx.Button(self,id=-1,label=eachData)
             button.SetFont(fonts.Fonts.romanBold16())
             costSizer.Add(button,1,wx.EXPAND)
-        #self.SetSizer(costSizer)
-        #costSizer.Fit(self)
         return costSizer
+
+    def callAddCost(self,event):
+        costFrame = adt.costDataFrame()
+        costFrame.Show()
+
+
 
 class costFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="cost",pos=wx.DefaultPosition,size=(800,600)):

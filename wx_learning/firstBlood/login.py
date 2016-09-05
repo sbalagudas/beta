@@ -3,6 +3,8 @@ import wx
 import costPanel as cP
 from DBOperation import DBOperation as dbo
 import time
+import common as cmm
+import fonts
 
 class logInPanel(wx.Panel):
     #def __init__(self,parent=None,id=-1,title="My Frame"):
@@ -23,7 +25,8 @@ class logInPanel(wx.Panel):
 
         self.createLoginButton()
         self.createPromptText()
-        (textSizer,self.textList) = self.createText(self.textInfo())
+        #(textSizer,self.textList) = self.createText(self.textInfo())
+        (textSizer,self.textList) = cmm.createStaticTextControl(self,self.textInfo(),fonts.Fonts.romanBold16())
         self.layout(textSizer)
 
     def createLoginButton(self):
@@ -53,7 +56,7 @@ class logInPanel(wx.Panel):
         self.SetSizer(boxSizer)
         self.Layout()
 
-    #@classmethod
+
     def createText(self,textData):
         sizer = wx.FlexGridSizer(cols=2,hgap=6,vgap=6)
         textList = []
@@ -74,6 +77,7 @@ class logInPanel(wx.Panel):
     def authentication(self,event):
         db = dbo()
         self.userName = self.textList[1].GetLabelText()
+
         password = self.textList[3].GetLabelText()
         dbPwd = db.getBanana(self.userName)
         #need decryption process, will add later.

@@ -22,7 +22,7 @@ class costPanel(wx.Panel):
     def layout(self,costGrid,costButton):
         self.costPanelSizer = wx.BoxSizer(wx.VERTICAL)
         self.costPanelSizer.Add(costGrid,1)
-        self.costPanelSizer.Add((0,16))
+        #self.costPanelSizer.Add((0,16))
         self.costPanelSizer.Add(costButton,1,wx.EXPAND)
         self.SetSizer(self.costPanelSizer)
 
@@ -34,6 +34,7 @@ class costPanel(wx.Panel):
         return ["Daily Data","Monthly Data","Yearly Data"]
 
     def createCostGrid(self):
+        self.costGridDict = {}
         costGrid = wx.GridSizer(cols=self.COLS_NUM,hgap=5,vgap=5)
         for eachCost in self.costCategory():
             button = buttons.GenToggleButton(self,id=-1,label=eachCost,size=(80,80))
@@ -41,6 +42,7 @@ class costPanel(wx.Panel):
             button.SetBezelWidth(3)
             button.SetUseFocusIndicator(False)
             button.SetFont(fonts.Fonts.romanBold14())
+            self.costGridDict[button.GetId()] = eachCost
             costGrid.Add(button,1)
         return costGrid
 
@@ -54,10 +56,10 @@ class costPanel(wx.Panel):
         return costSizer
 
     def callAddCost(self,event):
-        costFrame = adt.costDataFrame()
+        self.selectedCostType = self.costGridDict[event.GetId()]
+        print "self.selectedCostType : ",self.selectedCostType
+        costFrame = adt.costDataFrame(costName=self.selectedCostType)
         costFrame.Show()
-
-
 
 class costFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="cost",pos=wx.DefaultPosition,size=(800,600)):

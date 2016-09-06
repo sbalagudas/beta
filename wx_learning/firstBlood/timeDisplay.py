@@ -2,6 +2,7 @@ import wx
 import time
 import threading
 from paint import Paint as pt
+import fonts
 
 class timeDisplay(wx.Panel):
     def __init__(self,parent,id,curUser):
@@ -19,7 +20,7 @@ class timeDisplay(wx.Panel):
     def TextInfo(self):
         week = self.getTimeAndWeek()
         week = week[1]
-        return [self.curUser,self.curTime[0],"Week   "+str(week)]
+        return ["Hi, "+self.curUser,self.curTime[0],"Week   "+str(week)]
 
     def titleColorInfo(self):
         return ["DARK TURQUOISE","AQUAMARINE","MEDIUM TURQUOISE"]
@@ -29,16 +30,16 @@ class timeDisplay(wx.Panel):
         self.textList = []
         i = 0
         for eachItem in self.TextInfo():
-            text = wx.StaticText(self,id=-1,label=str(eachItem),style=wx.ROMAN)
+            text = wx.StaticText(self,id=-1,label=str(eachItem),style=wx.ROMAN|wx.ALIGN_CENTER)
             text.SetForegroundColour('Blue')
             text.SetBackgroundColour(self.GetBackgroundColour())
-            #text.SetBackgroundColour('White')
-            text.SetFont(self.fontBold)
+            #text.SetBackgroundColour(self.titleColorInfo()[i])
+            text.SetFont(fonts.Fonts.romanBold22())
 
             if 1 == i:
-                sizer.Add(text,2,wx.EXPAND)
+                sizer.Add(text,1,wx.ALIGN_CENTER)
             else :
-                sizer.Add(text,1,wx.EXPAND)
+                sizer.Add(text,1,wx.ALIGN_CENTER,10)
             i += 1
             self.textList.append(text)
         self.SetSizer(sizer)

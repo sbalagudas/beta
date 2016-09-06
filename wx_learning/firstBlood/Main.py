@@ -6,8 +6,14 @@ import login
 import time
 
 class mainFrame(wx.Frame):
-    def __init__(self,parent=None,id=wx.ID_ANY,title="Banana World",pos=(0,0),size=(800,600)):
-        wx.Frame.__init__(self,parent,id,title,pos,size)
+    def __init__(self,
+                 parent=None,
+                 id=wx.ID_ANY,
+                 title="Banana World",
+                 pos=(0,0),
+                 size=(800,600),
+                 style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER | wx.MINIMIZE_BOX |wx.MAXIMIZE_BOX)):
+        wx.Frame.__init__(self,parent,id,title,pos,size,style)
 
         self.panelTime = timeDisplay.timeDisplay(self,-1,'apple')
         #self.panelPaint = pt(self,-1)
@@ -24,7 +30,7 @@ class mainFrame(wx.Frame):
 
         mainBox = wx.BoxSizer(wx.VERTICAL)
         mainBox.Add(time,1,wx.EXPAND)
-        mainBox.Add(subBox,1,wx.EXPAND)
+        mainBox.Add(subBox,6,wx.EXPAND)
 
         self.SetSizer(mainBox)
         #mainBox.Fit(self)

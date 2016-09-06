@@ -4,11 +4,11 @@ import common as cmm
 import fonts
 
 class costDataFrame(wx.Frame):
-    def __init__(self,parent=None,id=-1,title="Add Cost",pos=(350,150),size=(400,300)):
+    def __init__(self,parent=None,id=-1,title="Add Cost",pos=(350,150),size=(400,300),costName=""):
         wx.Frame.__init__(self,parent,id,title,pos,size)
 
-        (sizer,textList) = cmm.createStaticTextControl(self,self.costDataInfo(),fonts.Fonts.romanBold12())
-
+        (sizer,self.textDict) = cmm.createStaticTextControl(self,self.costDataInfo(costName),fonts.Fonts.romanBold12())
+        print "dict : ",self.textDict
         buttonSizer = self.costDataButtons()
         #self.SetSizer(sizer)
         self.SetBackgroundColour("White")
@@ -26,12 +26,12 @@ class costDataFrame(wx.Frame):
             item.SetFont(fonts.Fonts.romanBold14())
             item.SetForegroundColour('Blue')
 
-    def costDataInfo(self):
-        return [("Cost Name",wx.ROMAN,'static'),
+    def costDataInfo(self,costName):
+        return [("Cost Name : ",wx.ROMAN,'static'),
+                (costName,wx.ROMAN,'static'),
+                ("Value : ",wx.ROMAN,'static'),
                 (wx.TE_NOHIDESEL,'ctrl'),
-                ("Value",wx.ROMAN,'static'),
-                (wx.TE_NOHIDESEL,'ctrl'),
-                ("Comments",wx.ROMAN,'static'),
+                ("Comments : ",wx.ROMAN,'static'),
                 (wx.TE_MULTILINE,'ctrl')]
 
     def costDataButtons(self):

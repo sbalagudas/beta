@@ -1,6 +1,11 @@
 import wx
 
 class Fonts():
+
+    @classmethod
+    def romanBold22(self):
+        return wx.Font(22,wx.ROMAN,wx.ITALIC,wx.BOLD)
+
     @classmethod
     def romanBold18(self):
         return wx.Font(18,wx.ROMAN,wx.ITALIC,wx.BOLD)

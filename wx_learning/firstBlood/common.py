@@ -5,15 +5,18 @@ def createStaticTextControl(parent,textInfo,font):
     #horSizer = wx.BoxSizer(wx.HORIZONTAL)
     #verSizer = wx.BoxSizer(wx.VERTICAL)
 
+    #textDict = {}
     textList = []
     for eachItem in textInfo:
         if 'static' in eachItem :
             text = wx.StaticText(parent,id=-1,label=eachItem[0],style=eachItem[1])
         else :
             text = wx.TextCtrl(parent,id=-1,size=(250,-1),style=eachItem[0])
-        text.SetFont(font)
-        sizer.Add(text,1,wx.EXPAND)
         textList.append(text)
+        text.SetFont(font)
+        sizer.Add(text,0,wx.EXPAND|wx.ALL,10)
+
+        #textDict[text.GetId()] = eachItem
 
     #sizer.AddMany(textList)
     #self.paintWindow.SetSizer(sizer)

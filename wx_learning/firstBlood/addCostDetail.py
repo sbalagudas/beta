@@ -2,15 +2,15 @@ import wx
 import login
 import common as cmm
 import fonts
+import DBOperation as dbo
+import enDecryption as ed
 
 class costDataFrame(wx.Frame):
-    def __init__(self,parent=None,id=-1,title="Add Cost",pos=(350,150),size=(400,300),costName=""):
+    def __init__(self,parent=None,id=-1,title="Add Cost",pos=(350,150),size=(400,300),costName="",style=wx.STAY_ON_TOP):
         wx.Frame.__init__(self,parent,id,title,pos,size)
-
-        (sizer,self.textDict) = cmm.createStaticTextControl(self,self.costDataInfo(costName),fonts.Fonts.romanBold12())
-        print "dict : ",self.textDict
+        self.costNameForDB = costName
+        (sizer,self.textList) = cmm.createStaticTextControl(self,self.costDataInfo(costName),fonts.Fonts.romanBold12())
         buttonSizer = self.costDataButtons()
-        #self.SetSizer(sizer)
         self.SetBackgroundColour("White")
         self.layout(sizer,buttonSizer)
 
@@ -32,7 +32,8 @@ class costDataFrame(wx.Frame):
                 ("Value : ",wx.ROMAN,'static'),
                 (wx.TE_NOHIDESEL,'ctrl'),
                 ("Comments : ",wx.ROMAN,'static'),
-                (wx.TE_MULTILINE,'ctrl')]
+                (wx.TE_MULTILINE,'ctrl'),
+                ("",wx.ALIGN_CENTER,'static')]
 
     def costDataButtons(self):
         costDataSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -49,7 +50,23 @@ class costDataFrame(wx.Frame):
         return costDataSizer
 
     def onAddCost(self,event):
-        pass
+        value = self.textList[3].GetLabelText()
+        comments = self.textList[5].GetLabelText()
+        if '.' in str(value):
+            value = value[:str(value).rfind('.')]
+        if not str(value).isdigit() or 0 == len(str(value)):
+            self.textList[6].SetLabel("value should be numbers...")
+        else :
+            name = ed.enDecryption.encryption(self.costNameForDB)
+            value = ed.enDecryption.encryption(value)
+            comments = ed.enDecryption.encryption(comments)
+            curTime = cmm.getTimeAndWeek()[0]
+
+            insertValue = [name,value,comments,curTime]
+            db = dbo.DBOperation()
+            db.insertData('cost',insertValue)
+            self.Destroy()
+
     def onCancel(self,event):
         self.Destroy()
 

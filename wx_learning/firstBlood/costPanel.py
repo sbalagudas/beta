@@ -17,6 +17,7 @@ class costPanel(wx.Panel):
         costGrid = self.createCostGrid()
         costButtonGrid = self.createCostButtonGrid()
 
+        self.oldCostType = 'Meal'
         self.layout(costGrid,costButtonGrid)
 
     def layout(self,costGrid,costButton):
@@ -35,15 +36,19 @@ class costPanel(wx.Panel):
 
     def createCostGrid(self):
         self.costGridDict = {}
+        self.costGridToggleList = {}
         costGrid = wx.GridSizer(cols=self.COLS_NUM,hgap=5,vgap=5)
         for eachCost in self.costCategory():
-            button = buttons.GenToggleButton(self,id=-1,label=eachCost,size=(80,80))
-            self.Bind(wx.EVT_BUTTON,self.callAddCost,button)
+            #button = wx.ToggleButton(self,id=-1,label=eachCost,size=(80,80))
+            button = buttons.GenToggleButton(self,id=-1,label=str(eachCost),size=(80,80))
             button.SetBezelWidth(3)
             button.SetUseFocusIndicator(False)
+            self.Bind(wx.EVT_BUTTON,self.callAddCost,button)
             button.SetFont(fonts.Fonts.romanBold14())
-            self.costGridDict[button.GetId()] = eachCost
             costGrid.Add(button,1)
+            self.costGridDict[button.GetId()] = eachCost
+            self.costGridToggleList[eachCost] = button
+        #self.costGridToggleList[self.costCategory()[0]]
         return costGrid
 
     def createCostButtonGrid(self):
@@ -57,18 +62,25 @@ class costPanel(wx.Panel):
 
     def callAddCost(self,event):
         self.selectedCostType = self.costGridDict[event.GetId()]
-        print "self.selectedCostType : ",self.selectedCostType
-        costFrame = adt.costDataFrame(costName=self.selectedCostType)
-        costFrame.Show()
+        if 0 == len(self.oldCostType) or self.oldCostType == self.selectedCostType:
+            self.oldCostType = self.selectedCostType
+            print "set"+self.oldCostType+"to true"
+            self.costGridToggleList[self.selectedCostType].SetToggle(True)
+        else :
+            #self.selectedCostType != self.oldCostType :
+            print "set"+self.oldCostType+"to false"
+            self.costGridToggleList[self.oldCostType].SetToggle(False)
+            self.oldCostType = self.selectedCostType
+        self.costFrame = adt.costDataFrame(costName=self.selectedCostType)
+        self.costFrame.Show()
+
 
 class costFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="cost",pos=wx.DefaultPosition,size=(800,600)):
         wx.Frame.__init__(self,parent,id,title,pos,size)
 
         self.cost = costPanel(self,-1)
-        #self.testPanel = testPanel(self,-1)
 
-        #self.layout(self.cost,self.testPanel)
 
     def layout(self,panel1,panel2):
         self.bs = wx.BoxSizer(wx.HORIZONTAL)

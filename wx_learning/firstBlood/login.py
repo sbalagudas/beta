@@ -77,9 +77,9 @@ class logInPanel(wx.Panel):
 
     def authentication(self,event):
         db = dbo()
-        print "self.textList : ",self.textList
+        #print "self.textList : ",self.textList
         self.userName = self.textList[1].GetLabelText()
-        print "user name : ",self.userName
+        #print "user name : ",self.userName
         password = self.textList[3].GetLabelText()
         dbPwd = db.getBanana(self.userName)
         #need decryption process, will add later.
@@ -113,7 +113,7 @@ class logInFrame(wx.Frame) :
                  id=-1,
                  title="log in window",
                  pos=wx.DefaultPosition,
-                 size=(400,350),
+                 size=(400,300),
                  style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER | wx.MINIMIZE_BOX |wx.MAXIMIZE_BOX)):
         wx.Frame.__init__(self,parent,id,title,pos,size,style)
 

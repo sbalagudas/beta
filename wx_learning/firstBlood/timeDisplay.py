@@ -3,6 +3,7 @@ import time
 import threading
 from paint import Paint as pt
 import fonts
+import common as cmm
 
 class timeDisplay(wx.Panel):
     def __init__(self,parent,id,curUser):
@@ -10,7 +11,7 @@ class timeDisplay(wx.Panel):
         self.fontBold = wx.Font(16,wx.ROMAN,wx.ITALIC,wx.BOLD)
         self.fontBold1 = wx.Font(20,wx.ROMAN,wx.ITALIC,wx.BOLD)
         self.curUser = curUser
-        self.curTime = self.getTimeAndWeek()
+        self.curTime = cmm.getTimeAndWeek()
 
         #multi-threading
         thd = threading.Thread(target=self.refreshTime,args=())
@@ -18,7 +19,7 @@ class timeDisplay(wx.Panel):
         thd.start()
 
     def TextInfo(self):
-        week = self.getTimeAndWeek()
+        week = cmm.getTimeAndWeek()
         week = week[1]
         return ["Hi, "+self.curUser,self.curTime[0],"Week   "+str(week)]
 
@@ -48,7 +49,7 @@ class timeDisplay(wx.Panel):
 
     def refreshTime(self):
         while True:
-            self.curTime = self.getTimeAndWeek()[0]
+            self.curTime = cmm.getTimeAndWeek()[0]
             self.textList[1].SetLabel(str(self.curTime))
             time.sleep(1)
 
@@ -58,9 +59,7 @@ class timeDisplay(wx.Panel):
         sizer.Add(timeBox,1)
         #self.SetSizer(sizer)
 
-    def getTimeAndWeek(self):
-        itf = "%Y-%m-%d %H:%M:%S"
-        return (time.strftime(itf,time.localtime()),time.strftime("%W"))
+
 
 class timeFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="time display",pos=(0,0),size=(800,600)):

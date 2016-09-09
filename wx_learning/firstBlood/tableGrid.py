@@ -41,7 +41,8 @@ class SimpleGrid(wx.grid.Grid):
         wx.grid.Grid.__init__(self,parent,id=-1)
         self.tableData = tableData
         self.tableLabel = tableLabel
-        self.SetTable(basicTable(tableData=self.tableData,colLabel=self.tableLabel))
+        self.basicTable = basicTable(tableData=self.tableData,rowLabel=self.tableLabel,colLabel=("Name","Money","Comments"))
+        self.SetTable(self.basicTable)
 
 class gridPanel(wx.Panel):
     def __init__(self,parent,id):
@@ -57,14 +58,27 @@ class gridPanel(wx.Panel):
         wx.Panel.__init__(self,parent,id)
         (tableData,tableLabel) = cmm.getAndConvert("select * from cost")
         self.grid = SimpleGrid(self,tableData,tableLabel)
+        self.__setGridAttributes(self.grid)
 
-        self.grid.SetLabelTextColour('Forest Green')
-        self.grid.SetDefaultCellTextColour('Blue')
-        self.grid.SetDefaultCellAlignment(wx.ALIGN_CENTER,wx.ALIGN_BOTTOM)
-        self.grid.SetDefaultCellFont(fonts.Fonts.romanBold12())
-        self.grid.SetDefaultColSize(1,False)
-        self.grid.SetInitialSize((550,500))
-        self.grid.Fit()
+
+    def createTimeCbx(self):
+        cbxSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+    def __setGridAttributes(self,grid):
+        grid.BeginBatch()
+        grid.SetLabelTextColour('Forest Green')
+        grid.SetDefaultCellTextColour('Blue')
+        grid.SetDefaultCellAlignment(wx.ALIGN_CENTER,wx.ALIGN_BOTTOM)
+        grid.SetDefaultCellFont(fonts.Fonts.romanBold12())
+        #grid.SetDefaultCellBackgroundColour("Cyan")
+        colSize = 0
+        colSize = self.grid.GetColSize(0)
+        print "size before : ",colSize
+        self.grid.SetColSize(1,500)
+        print "size after : ",colSize
+        #self.grid.SetDefaultColSize(200,False)
+        grid.EndBatch()
+        grid.Fit()
 
 class tableGridFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="test frame",pos=(0,0),size=(600,400)):
@@ -77,15 +91,23 @@ class tableGridFrame(wx.Frame):
                           ('ee',11,'eee','2016-01-05 11:11:55'))
         tableLabel = ('cost name','value','comments','date')
 
-        #gridPanel = gridPanel()
+        gp = gridPanel(self,-1)
+        gp.SetBackgroundColour("LIGHT BLUE")
+        self.blackBox = self.createBlackBox(self)
 
-        #grid = SimpleGrid(self,tableData,tableLabel)
-        #grid.SetFont(fonts.Fonts.romanBold18())
-        #grid.SetCellTextColour(2,3,'Cyan')
-        #grid.SetBackgroundColour("Cyan")
-        #grid.Fit()
+        self.layout(self.blackBox,gp)
+    def layout(self,blackBox,gridPanel):
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(blackBox,1,wx.EXPAND)
+        mainSizer.Add(gridPanel,9,wx.EXPAND)
+        self.SetSizer(mainSizer)
 
-
+    def createBlackBox(self,parent):
+        blackBox = wx.TextCtrl(parent,-1,"BLACK-BOX...DO NOT TOUCH...")
+        blackBox.SetBackgroundColour("TURQUOISE")
+        blackBox.SetForegroundColour("CADET BLUE")
+        blackBox.SetFont(fonts.Fonts.romanBold12())
+        return blackBox
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()

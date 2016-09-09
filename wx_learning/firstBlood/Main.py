@@ -34,6 +34,7 @@ class mainFrame(wx.Frame):
     def layout(self,time,cP,tableGrid):
         subBox = wx.BoxSizer(wx.HORIZONTAL)
         subBox.Add(cP,0)
+
         subBox.Add(tableGrid,1,wx.EXPAND)
 
         mainBox = wx.BoxSizer(wx.VERTICAL)

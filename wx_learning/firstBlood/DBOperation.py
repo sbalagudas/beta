@@ -40,12 +40,13 @@ class DBOperation(object) :
 
     #@staticmethod
     def insertData(self,tableName,value):
+        insertCommand = ""
         if "user" == tableName :
             insertCommand = "INSERT INTO " + str(tableName) + " (username,password,regDate)" + " values (?,?,?)"
         elif "cost" == tableName :
             insertCommand = "INSERT INTO " + str(tableName) + " (costName,costValue,comments,costDate)" + " values (?,?,?,?)"
-
         self.cursor.execute(insertCommand,value)
+        print "[DBO.insertData] : command <%s> executed...[ %s ]"%(insertCommand,value)
         self.conn.commit()
 
     #@staticmethod
@@ -82,8 +83,9 @@ if __name__ == "__main__":
     values=[('lunch',11,'aaa','2016-01-10 12:12:12'),
             ('snack',22,'bbb','2016-01-10 13:13:13'),
             ('fuel',33,'cccccccc','2016-01-11 14:14:14'),
-            ('vegetable',22,'dddddd','2016-01-12 15:15:15'),
-            ('lunch',44,'eeeeeeeeeeee','2016-01-13 16:16:16')]
+            ('vegetable',44,'dddddd','2016-01-12 15:15:15'),
+            ('lunch',55,'eeeeeeeeeeee','2016-01-13 16:16:16'),
+            ('\nzJXZoR3T', '\n3czN', '\nqpma', '2016-09-09 10:32:04')]
 
 ##########################
     #dbo.dropTable('cost')
@@ -91,7 +93,7 @@ if __name__ == "__main__":
 ##########################
 
     #dbo.createTable('user')
-    #dbo.createTable('cost')
+    dbo.createTable('cost')
     #for item in userInfo:
     #    dbo.insertData('user',item)
     #r = dbo.fetchAllData('user')
@@ -99,11 +101,12 @@ if __name__ == "__main__":
     #print "-------------------------------"
     #for value in values :
     #    dbo.insertData('cost',value)
-    #c = dbo.fetchAllData('cost')
+    c = dbo.fetchAllData('cost')
+    print c
     #print "cost information : \n %s"%c
 
 
-    cmd1 = "SELECT * FROM cost WHERE costDate LIKE '2016-09%'"
+    cmd1 = "SELECT costDate,costName,costValue,comments FROM cost"
     cmd2 = "SELECT * FROM cost WHERE costDate LIKE '2016-09-07%'"
     #cmd3 = "SELECT * FROM cost WHERE costDate LIKE '2016-01-10 13:13%'"
     a = dbo.customizedFetch(cmd1)
@@ -111,12 +114,14 @@ if __name__ == "__main__":
     result1 = []
     for item in a :
         item = list(item)
+        print "listed item : ",item
         for i in range(1,4):
-            #print "item["+str(i)+"] before: ",item[i]
+            print "item["+str(i)+"] before: ",item[i]
             item[i]= ed.enDecryption.decryption(item[i])
-            #print "item["+str(i)+"] after : ",item[i]
-            result.append(item)
-
+            print "item["+str(i)+"] after : ",item[i]
+        result.append(item)
+    print "result : ",result
+'''
     b = dbo.customizedFetch(cmd2)
     for item in b :
         item = list(item)
@@ -131,7 +136,7 @@ if __name__ == "__main__":
     #print "a : ",a
     #print "b : ",b
     #print "c : ",c
-
+'''
 
 
 

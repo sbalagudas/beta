@@ -28,13 +28,13 @@ def getAndConvert(sqlCommand):
     gridLabel = []
     for item in rawData :
         item = list(item)
-        print "item :",item
+        #print "item :",item
         for i in range(1,4):
-            print "item before : ",item[i]
+            #print "item before : ",item[i]
             item[i]= ed.enDecryption.decryption(item[i].strip())
-            print "item after : ",item[i]
-            gridData.append(item[1:3])
-            gridLabel.append(item[len(item)-1:])
+            #print "item after : ",item[i]
+        gridData.append(item[1:4])
+        gridLabel.append(item[len(item)-1:])
     print "gridData : ",gridData
     print "gridLabel : ",gridLabel
     return gridData,gridLabel

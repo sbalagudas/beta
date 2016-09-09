@@ -62,7 +62,8 @@ class costDataFrame(wx.Frame):
             comments = ed.enDecryption.encryption(comments)
             curTime = cmm.getTimeAndWeek()[0]
 
-            insertValue = [name,value,comments,curTime]
+            insertValue = (name,value,comments,curTime)
+
             db = dbo.DBOperation()
             db.insertData('cost',insertValue)
             self.Destroy()

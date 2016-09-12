@@ -4,6 +4,7 @@ import fonts
 import common as cmm
 
 class basicTable(wx.grid.PyGridTableBase):
+    #def __init__(self,tableData,rowLabel=None,colLabel=None):
     def __init__(self,tableData,rowLabel=None,colLabel=None):
         wx.grid.PyGridTableBase.__init__(self)
 
@@ -12,10 +13,8 @@ class basicTable(wx.grid.PyGridTableBase):
         self.colLabel = colLabel
 
     def GetNumberRows(self):
-        print "rows : ",len(self.tableData)
         return len(self.tableData)
     def GetNumberCols(self):
-        print "cols : ",len(self.tableData[0])
         return len(self.tableData[0])
     def IsEmptyCell(self,row,col):
         if self.tableData[int(row)][int(col)]:
@@ -23,79 +22,64 @@ class basicTable(wx.grid.PyGridTableBase):
         else :
             return False
     def GetValue(self,row,col):
-        #print "value : ",self.tableData[int(row)][int(col)]
         return self.tableData[int(row)][int(col)]
     def SetValue(self,row,col,value):
         self.tableData[int(row)][int(col)] = value
     def GetColLabelValue(self,col):
-        #print "table label : ",self.tableLabel[col]
         if self.colLabel :
             return self.colLabel[col]
     def GetRowLabelValue(self,col):
-        #print "table label : ",self.tableLabel[col]
         if self.rowLabel :
             return self.rowLabel[col]
 
-class SimpleGrid(wx.grid.Grid):
-    def __init__(self,parent,tableData,tableLabel):
-        wx.grid.Grid.__init__(self,parent,id=-1)
-        self.tableData = tableData
-        self.tableLabel = tableLabel
-        self.basicTable = basicTable(tableData=self.tableData,rowLabel=self.tableLabel,colLabel=("Name","Money","Comments"))
-        self.SetTable(self.basicTable)
-
 class gridPanel(wx.Panel):
     def __init__(self,parent,id):
-        '''
-        tableData = (('aa',11,'aaa','2016-01-01 11:11:11'),
-                          ('bb',11,'bbb','2016-01-02 11:11:22'),
-                          ('cc',11,'cccasdfasdfasdfa','2016-01-03 11:11:33'),
-                          ('dd',11,'dddasdfasdfasdfasdfas','2016-01-04 11:11:44'),
-                          ('ee',11,'eeeasdfasdf','2016-01-05 11:11:55'))
-        tableLabel = ('cost name','value','comments','date')
-        '''
-
         wx.Panel.__init__(self,parent,id)
         (tableData,tableLabel) = cmm.getAndConvert("select * from cost")
-        self.grid = SimpleGrid(self,tableData,tableLabel)
-        self.__setGridAttributes(self.grid)
-
+        table = basicTable(tableData,rowLabel=tableLabel,colLabel=("Name","Money","Comments"))
+        self.grid = wx.grid.Grid(self)
+        self.grid.SetTable(table)
+        self.__setGridAttributes()
+        panelSizer = wx.BoxSizer()
+        panelSizer.Add(self.grid,1,wx.EXPAND)
+        self.SetSizer(panelSizer)
+        #width, height = self.GetClientSizeTuple()
+        #print "w,h : %s,%s"%(width,height)
+        #grid.SetDefaultColSize(width/3.5)
 
     def createTimeCbx(self):
         cbxSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-    def __setGridAttributes(self,grid):
-        grid.BeginBatch()
-        grid.SetLabelTextColour('Forest Green')
-        grid.SetDefaultCellTextColour('Blue')
-        grid.SetDefaultCellAlignment(wx.ALIGN_CENTER,wx.ALIGN_BOTTOM)
-        grid.SetDefaultCellFont(fonts.Fonts.romanBold12())
+    def __setGridAttributes(self):
+        self.grid.BeginBatch()
+        self.grid.SetLabelTextColour('Forest Green')
+        self.grid.SetDefaultCellTextColour('Blue')
+        self.grid.SetDefaultCellAlignment(wx.ALIGN_CENTER,wx.ALIGN_BOTTOM)
+        self.grid.SetDefaultCellFont(fonts.Fonts.romanBold12())
+        self.grid.AutoSizeRows()
         #grid.SetDefaultCellBackgroundColour("Cyan")
-        colSize = 0
-        colSize = self.grid.GetColSize(0)
-        print "size before : ",colSize
-        self.grid.SetColSize(1,500)
-        print "size after : ",colSize
-        #self.grid.SetDefaultColSize(200,False)
-        grid.EndBatch()
-        grid.Fit()
+        #grid.SetDefaultColSize(300,True)
+        #grid.SetDefaultRowSize(200,True)
+
+
 
 class tableGridFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="test frame",pos=(0,0),size=(600,400)):
         wx.Frame.__init__(self,parent,id,title,pos,size)
 
-        tableData = (('aa',11,'aaa','2016-01-01 11:11:11'),
-                          ('bb',11,'bbb','2016-01-02 11:11:22'),
-                          ('cc',11,'ccc','2016-01-03 11:11:33'),
-                          ('dd',11,'ddd','2016-01-04 11:11:44'),
-                          ('ee',11,'eee','2016-01-05 11:11:55'))
-        tableLabel = ('cost name','value','comments','date')
+        self.panel = gridPanel(self,-1)
 
-        gp = gridPanel(self,-1)
-        gp.SetBackgroundColour("LIGHT BLUE")
-        self.blackBox = self.createBlackBox(self)
+        width, height = self.GetClientSizeTuple()
 
-        self.layout(self.blackBox,gp)
+        self.panel.grid.SetDefaultColSize(width/4.0,True)
+        self.panel.grid.SetRowLabelSize(width/4.0)
+        #frameSizer = wx.BoxSizer(wx.VERTICAL)
+        #frameSizer.Add(self.panel,1,wx.EXPAND)
+
+        #self.panel.Layout()
+        self.Layout()
+
+
     def layout(self,blackBox,gridPanel):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(blackBox,1,wx.EXPAND)

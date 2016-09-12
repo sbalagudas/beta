@@ -23,12 +23,15 @@ class mainFrame(wx.Frame):
         wx.Frame.__init__(self,parent,id,title,pos,size,style)
 
         self.panelTime = timeDisplay.timeDisplay(self,-1,'apple')
-        #self.panelPaint = pt(self,-1)
         self.cost = cP.costPanel(self,-1)
-        #self.tstPanel = cP.testPanel(self,-1)
-        #self.tstPanel.SetBackgroundColour('White')
-        #self.tableGrid = tableGrid.SimpleGrid(self,self.tableData,self.tableLabel)
         self.tableGrid = tableGrid.gridPanel(self,-1)
+
+        (width, height) = self.GetClientSizeTuple()
+        print "w,h : %s,%s"%(width,height)
+        self.tableGrid.grid.SetDefaultColSize((width-253)/4.0,True)
+        self.tableGrid.grid.SetRowLabelSize((width-253)/4.0)
+
+
         self.layout(self.panelTime,self.cost,self.tableGrid)
 
     def layout(self,time,cP,tableGrid):

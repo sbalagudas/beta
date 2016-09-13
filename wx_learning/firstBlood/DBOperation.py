@@ -80,12 +80,44 @@ if __name__ == "__main__":
                 ('pear','pear123',"2016-01-02 12:12:12"),
                 ('banana','banana123',"2016-01-03 12:12:12"),
                 ('peach','peach123',"2016-01-02 14:14:14")]
-    values=[('lunch',11,'aaa','2016-01-10 12:12:12'),
+    values=[('lunch',11,'aaa','2015-01-10 12:12:12'),
+            ('lunch',11,'aaa','2015-01-11 12:12:12'),
+            ('lunch',11,'aaa','2015-01-12 12:12:12'),
+            ('lunch',11,'aaa','2015-01-13 12:12:12'),
+            ('lunch',11,'aaa','2015-02-10 12:12:12'),
+            ('lunch',11,'aaa','2015-02-11 12:12:12'),
+            ('lunch',11,'aaa','2015-02-12 12:12:12'),
+            ('lunch',11,'aaa','2015-02-13 12:12:12'),
+            ('lunch',11,'aaa','2015-03-10 12:12:12'),
+            ('lunch',11,'aaa','2015-04-14 12:12:12'),
+            ('lunch',11,'aaa','2015-04-15 12:12:12'),
+            ('lunch',11,'aaa','2015-05-17 12:12:12'),
+            ('lunch',11,'aaa','2015-05-17 12:12:12'),
+            ('lunch',11,'aaa','2015-05-19 12:12:12'),
+            ('lunch',11,'aaa','2015-06-01 12:12:12'),
+            ('lunch',11,'aaa','2015-06-03 12:12:12'),
+            ('lunch',11,'aaa','2015-06-11 12:12:12'),
+            ('lunch',11,'aaa','2015-06-29 12:12:12'),
+            ('lunch',11,'aaa','2015-07-21 12:12:12'),
+            ('lunch',11,'aaa','2015-07-22 12:12:12'),
+            ('lunch',11,'aaa','2015-08-10 12:12:12'),
+            ('lunch',11,'aaa','2015-10-10 12:12:12'),
+            ('lunch',11,'aaa','2015-10-10 12:12:12'),
+            ('lunch',11,'aaa','2015-12-10 12:12:12'),
+            ('lunch',11,'aaa','2015-12-18 12:12:12'),
             ('snack',22,'bbb','2016-01-10 13:13:13'),
-            ('fuel',33,'cccccccc','2016-01-11 14:14:14'),
-            ('vegetable',44,'dddddd','2016-01-12 15:15:15'),
-            ('lunch',55,'eeeeeeeeeeee','2016-01-13 16:16:16'),
-            ('\nzJXZoR3T', '\n3czN', '\nqpma', '2016-09-09 10:32:04')]
+            ('lunch',11,'aaa','2016-01-19 12:12:12'),
+            ('lunch',11,'aaa','2016-01-26 12:12:12'),
+            ('lunch',11,'aaa','2016-02-03 12:12:12'),
+            ('lunch',11,'aaa','2016-02-11 12:12:12'),
+            ('lunch',11,'aaa','2016-02-29 12:12:12'),
+            ('lunch',11,'aaa','2017-07-21 12:12:12'),
+            ('lunch',11,'aaa','2017-07-22 12:12:12'),
+            ('lunch',11,'aaa','2017-08-10 12:12:12'),
+            ('lunch',11,'aaa','2017-10-10 12:12:12'),
+            ('lunch',11,'aaa','2017-10-10 12:12:12'),
+            ('lunch',11,'aaa','2017-12-10 12:12:12'),
+            ('lunch',11,'aaa','2017-12-18 12:12:12')]
 
 ##########################
     #dbo.dropTable('cost')
@@ -99,10 +131,15 @@ if __name__ == "__main__":
     #r = dbo.fetchAllData('user')
     #print "user information : \n %s"%r
     #print "-------------------------------"
+
     #for value in values :
-    #    dbo.insertData('cost',value)
-    c = dbo.fetchAllData('cost')
-    print c
+    #    tmp = []
+    #    for item in value:
+    #        var = ed.enDecryption.encryption(str(item))
+    #        tmp.append(var)
+    #    dbo.insertData('cost',tmp)
+    #c = dbo.fetchAllData('cost')
+    #print c
     #print "cost information : \n %s"%c
 
 
@@ -115,10 +152,10 @@ if __name__ == "__main__":
     for item in a :
         item = list(item)
         print "listed item : ",item
-        for i in range(1,4):
-            print "item["+str(i)+"] before: ",item[i]
-            item[i]= ed.enDecryption.decryption(item[i])
-            print "item["+str(i)+"] after : ",item[i]
+        for i in range(len(item)):
+            #print "item["+str(i)+"] before: ",item[i]
+            item[i] = ed.enDecryption.decryption(item[i])
+            #print "item["+str(i)+"] after : ",item[i]
         result.append(item)
     print "result : ",result
 '''

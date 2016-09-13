@@ -21,3 +21,6 @@ class Fonts():
     @classmethod
     def romanBold12(self):
         return wx.Font(12,wx.ROMAN,wx.ITALIC,wx.BOLD)
+    @classmethod
+    def romanBold10(self):
+        return wx.Font(12,wx.ROMAN,wx.ITALIC,wx.BOLD)

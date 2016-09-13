@@ -35,7 +35,7 @@ class basicTable(wx.grid.PyGridTableBase):
 class gridPanel(wx.Panel):
     def __init__(self,parent,id):
         wx.Panel.__init__(self,parent,id)
-        (tableData,tableLabel) = cmm.getAndConvert("select * from cost")
+        (tableData,tableLabel) = cmm.getAndConvert()
         table = basicTable(tableData,rowLabel=tableLabel,colLabel=("Name","Money","Comments"))
         self.grid = wx.grid.Grid(self)
         self.grid.SetTable(table)
@@ -55,8 +55,10 @@ class gridPanel(wx.Panel):
         self.grid.SetLabelTextColour('Forest Green')
         self.grid.SetDefaultCellTextColour('Blue')
         self.grid.SetDefaultCellAlignment(wx.ALIGN_CENTER,wx.ALIGN_BOTTOM)
-        self.grid.SetDefaultCellFont(fonts.Fonts.romanBold12())
+        self.grid.SetDefaultCellFont(fonts.Fonts.romanBold10())
+
         self.grid.AutoSizeRows()
+        self.grid.EnableEditing(False)
         #grid.SetDefaultCellBackgroundColour("Cyan")
         #grid.SetDefaultColSize(300,True)
         #grid.SetDefaultRowSize(200,True)

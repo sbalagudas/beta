@@ -20,24 +20,27 @@ def getTimeAndWeek():
     itf = "%Y-%m-%d %H:%M:%S"
     return (time.strftime(itf,time.localtime()),time.strftime("%W"))
 
-def getAndConvert(sqlCommand):
+def getAndConvert():
     dbo = DBOperation.DBOperation()
-    rawData = dbo.customizedFetch(sqlCommand)
+    #rawData = dbo.customizedFetch(sqlCommand)
+    rawData = dbo.fetchAllData('cost')
     print "raw data : ",rawData
     gridData = []
     gridLabel = []
+    result1 = []
+
     for item in rawData :
         item = list(item)
-        #print "item :",item
-        for i in range(1,4):
-            #print "item before : ",item[i]
-            item[i]= ed.enDecryption.decryption(item[i].strip())
-            #print "item after : ",item[i]
-        gridData.append(item[1:4])
-        gridLabel.append(item[len(item)-1:])
-    print "gridData : ",gridData
-    print "gridLabel : ",gridLabel
+        print "listed item : ",item
+        for i in range(1,len(item)):
+            item[i] = ed.enDecryption.decryption(item[i])
+        gridData.append(item[1:-1])
+        gridLabel.append(item[-1:])
+    print "result : ",gridData
     return gridData,gridLabel
+
+def unicodeToUTF(string):
+    return unicode.encode(string)
 
 
 

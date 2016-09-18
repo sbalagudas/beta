@@ -24,19 +24,20 @@ def getAndConvert():
     dbo = DBOperation.DBOperation()
     #rawData = dbo.customizedFetch(sqlCommand)
     rawData = dbo.fetchAllData('cost')
-    print "raw data : ",rawData
+    #print "raw data : ",rawData
     gridData = []
     gridLabel = []
     result1 = []
 
     for item in rawData :
         item = list(item)
-        print "listed item : ",item
+        #print "listed item : ",item
         for i in range(1,len(item)):
             item[i] = ed.enDecryption.decryption(item[i])
         gridData.append(item[1:-1])
-        gridLabel.append(item[-1:])
-    print "result : ",gridData
+        gridLabel.append(item[-1:][0])
+    #print "result : ",gridData
+    #print "gridLabel : ",gridLabel
     return gridData,gridLabel
 
 def unicodeToUTF(string):

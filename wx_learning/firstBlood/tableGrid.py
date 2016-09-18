@@ -2,6 +2,7 @@ import wx
 import wx.grid
 import fonts
 import common as cmm
+import dataSelection as ds
 
 class basicTable(wx.grid.PyGridTableBase):
     #def __init__(self,tableData,rowLabel=None,colLabel=None):
@@ -15,7 +16,10 @@ class basicTable(wx.grid.PyGridTableBase):
     def GetNumberRows(self):
         return len(self.tableData)
     def GetNumberCols(self):
-        return len(self.tableData[0])
+        try:
+            return len(self.tableData[0])
+        except IndexError:
+            pass
     def IsEmptyCell(self,row,col):
         if self.tableData[int(row)][int(col)]:
             return True
@@ -32,20 +36,37 @@ class basicTable(wx.grid.PyGridTableBase):
         if self.rowLabel :
             return self.rowLabel[col]
 
-class gridPanel(wx.Panel):
-    def __init__(self,parent,id):
+class dataPanel(wx.Panel):
+    def __init__(self,parent,id,tableData,tableLabel):
         wx.Panel.__init__(self,parent,id)
-        (tableData,tableLabel) = cmm.getAndConvert()
+        #(tableData,tableLabel) = cmm.getAndConvert()
         table = basicTable(tableData,rowLabel=tableLabel,colLabel=("Name","Money","Comments"))
+        #create tableGrid panel
         self.grid = wx.grid.Grid(self)
         self.grid.SetTable(table)
         self.__setGridAttributes()
-        panelSizer = wx.BoxSizer()
-        panelSizer.Add(self.grid,1,wx.EXPAND)
-        self.SetSizer(panelSizer)
-        #width, height = self.GetClientSizeTuple()
-        #print "w,h : %s,%s"%(width,height)
-        #grid.SetDefaultColSize(width/3.5)
+        #create black box text ctrl in this panel
+        self.blackBox = self.createBlackBox(self)
+        #create date dropDown list panel
+        self.dropDown = ds.timeSelectionPanel(self,-1)
+
+        self.layout(self.blackBox,self.dropDown,self.grid)
+
+    def layout(self,blackBox,dropDownPanel,gridPanel):
+        dataPanelSizer = wx.BoxSizer(wx.VERTICAL)
+        dataPanelSizer.Add(blackBox,1,wx.EXPAND)
+        dataPanelSizer.Add((0,2))
+        dataPanelSizer.Add(dropDownPanel,1,wx.EXPAND)
+        dataPanelSizer.Add((0,2))
+        dataPanelSizer.Add(gridPanel,8,wx.EXPAND)
+        self.SetSizerAndFit(dataPanelSizer)
+
+    def createBlackBox(self,parent):
+        blackBox = wx.TextCtrl(parent,-1,"BLACK-BOX...DO NOT TOUCH...")
+        blackBox.SetBackgroundColour("TURQUOISE")
+        blackBox.SetForegroundColour("CADET BLUE")
+        blackBox.SetFont(fonts.Fonts.romanBold12())
+        return blackBox
 
     def createTimeCbx(self):
         cbxSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -59,41 +80,22 @@ class gridPanel(wx.Panel):
 
         self.grid.AutoSizeRows()
         self.grid.EnableEditing(False)
-        #grid.SetDefaultCellBackgroundColour("Cyan")
-        #grid.SetDefaultColSize(300,True)
-        #grid.SetDefaultRowSize(200,True)
-
-
+        self.grid.SetLabelBackgroundColour('White')
 
 class tableGridFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="test frame",pos=(0,0),size=(600,400)):
         wx.Frame.__init__(self,parent,id,title,pos,size)
 
-        self.panel = gridPanel(self,-1)
+        (tableData,tableLabel) = cmm.getAndConvert()
+        self.panel = dataPanel(self,-1,tableData,tableLabel)
 
         width, height = self.GetClientSizeTuple()
 
         self.panel.grid.SetDefaultColSize(width/4.0,True)
         self.panel.grid.SetRowLabelSize(width/4.0)
-        #frameSizer = wx.BoxSizer(wx.VERTICAL)
-        #frameSizer.Add(self.panel,1,wx.EXPAND)
-
-        #self.panel.Layout()
-        self.Layout()
 
 
-    def layout(self,blackBox,gridPanel):
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(blackBox,1,wx.EXPAND)
-        mainSizer.Add(gridPanel,9,wx.EXPAND)
-        self.SetSizer(mainSizer)
 
-    def createBlackBox(self,parent):
-        blackBox = wx.TextCtrl(parent,-1,"BLACK-BOX...DO NOT TOUCH...")
-        blackBox.SetBackgroundColour("TURQUOISE")
-        blackBox.SetForegroundColour("CADET BLUE")
-        blackBox.SetFont(fonts.Fonts.romanBold12())
-        return blackBox
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()

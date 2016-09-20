@@ -17,17 +17,18 @@ class timeSelectionPanel(wx.Panel):
 
         #create the submit button.
         submitButton = wx.Button(self,id=-1,label="Submit")
-        self.Bind(wx.EVT_BUTTON,self.searchDataViaButton,submitButton)
+        self.Bind(wx.EVT_BUTTON,Main.mainFrame.updateTableGrid,submitButton)
         #create combox and add them to sizer
-        cbSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.cbSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         for i in range(3):
             cbx = wx.ComboBox(parent=self,id=-1,value=cbxDefaultValue[i][0],choices='',style=wx.CB_DROPDOWN,name=cbxDefaultValue[i][0])
             self.Bind(wx.EVT_COMBOBOX,cbxDefaultValue[i][1],cbx)
-            cbSizer.Add(cbx,1,wx.EXPAND)
+            self.cbSizer.Add(cbx,1,wx.EXPAND)
             self.cbxList.append(cbx)
-        cbSizer.Add(submitButton,1)
-        self.SetSizer(cbSizer)
+        self.cbSizer.Add(submitButton,1)
+        self.SetSizer(self.cbSizer)
+
         self.initYear()
 
     def initYear(self):
@@ -64,11 +65,10 @@ class timeSelectionPanel(wx.Panel):
         (tableData,tableLabel) = cmm.getAndConvert()
         print "1111"
         Main.mainFrame.tableGrid = tableGrid.dataPanel(self,-1,tableData,tableLabel)
-        Main.mainFrame.Refresh()
-
-
-
-
+        #panel = tableGrid.dataPanel(self,-1,tableData,tableLabel)
+        #tableGrid.dataPanel.Refresh(panel)
+        Main.mainFrame.tableGrid.Refresh()
+        #Main.mainFrame.tableGrid.Refresh(Main.mainFrame.tableGrid,True)
 class Frame(wx.Frame):
     def __init__(self,parent=None,id=-1,title='time selection',pos=wx.DefaultPosition,size=(600,400)):
         wx.Frame.__init__(self,parent,id,title,pos,size)

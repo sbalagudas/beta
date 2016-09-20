@@ -14,7 +14,7 @@ class dateFilter():
             cleanedTimeList.append(item[:item.rfind(' ')])
 
         cleanedTimeList = list(set(cleanedTimeList))
-        print "cleanedTimeList : ",cleanedTimeList
+        #print "cleanedTimeList : ",cleanedTimeList
         return cleanedTimeList
 
     @classmethod

@@ -1,6 +1,6 @@
 import wx
 import timeDisplay
-#from paint import Paint as pt
+import common as cmm
 import costPanel as cP
 import login
 import time
@@ -21,14 +21,18 @@ class mainFrame(wx.Frame):
         self.cost = cP.costPanel(self,-1)
         self.tableGrid = tableGrid.dataPanel(self,-1,'','')
         #self.tableFrame = tableGrid.tableGridFrame()
-
+        #self.tableGrid.Refresh()
         (width, height) = self.GetClientSizeTuple()
         print "w,h : %s,%s"%(width,height)
         self.tableGrid.grid.SetDefaultColSize((width-253)/4.0,True)
         self.tableGrid.grid.SetRowLabelSize((width-253)/4.0)
 
-
         self.layout(self.panelTime,self.cost,self.tableGrid)
+
+    def updateTableGrid(self,event):
+        (tableData,tableLabel) = cmm.getAndConvert()
+        self.tableGrid = tableGrid.dataPanel(self,-1,tableData,tableLabel)
+        self.Refresh()
 
     def layout(self,time,cP,tableGrid):
         subBox = wx.BoxSizer(wx.HORIZONTAL)

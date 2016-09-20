@@ -14,6 +14,7 @@ class timeDisplay(wx.Panel):
         self.curTime = cmm.getTimeAndWeek()
 
         #multi-threading
+        #wx.CallAfter(self.refreshTime)
         thd = threading.Thread(target=self.refreshTime,args=())
         self.createStaticText()
         thd.start()

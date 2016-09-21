@@ -13,7 +13,7 @@ class mainFrame(wx.Frame):
                  id=wx.ID_ANY,
                  title="Banana World",
                  pos=(0,0),
-                 size=(1024,768),
+                 size=(900,600),
                  style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER | wx.MINIMIZE_BOX |wx.MAXIMIZE_BOX)):
         wx.Frame.__init__(self,parent,id,title,pos,size,style)
 
@@ -25,7 +25,7 @@ class mainFrame(wx.Frame):
         (width, height) = self.GetClientSizeTuple()
         print "w,h : %s,%s"%(width,height)
         self.tableGrid.grid.SetDefaultColSize((width-253)/4.0,True)
-        self.tableGrid.grid.SetRowLabelSize((width-253)/4.0)
+        self.tableGrid.grid.SetRowLabelSize((width-253)/4.6)
 
         self.layout(self.panelTime,self.cost,self.tableGrid)
 

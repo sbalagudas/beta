@@ -58,6 +58,7 @@ class DBOperation(object) :
 
     #@staticmethod
     def customizedFetch(self,cmd):
+        print "command <%s> executing !"%cmd
         self.cursor.execute(cmd)
         print "command <%s> executed !"%cmd
         return self.cursor.fetchall()
@@ -166,16 +167,18 @@ if __name__ == "__main__":
     #dbo.createTable('user')
     dbo.createTable('cost')
     #for item in userInfo:
-    #    dbo.insertData('user',item)
+   #     dbo.insertData('user',item)
     #r = dbo.fetchAllData('user')
     #print "user information : \n %s"%r
     #print "-------------------------------"
 
     #for value in values1 :
     #    tmp = []
-    #    for item in value:
-    #        var = ed.enDecryption.encryption(str(item))
+    #    i = 0
+    #    for i in range(0,3):
+    #        var = ed.enDecryption.encryption(str(value[i]))
     #        tmp.append(var)
+    #    tmp.append(value[3])
     #    dbo.insertData('cost',tmp)
     #c = dbo.fetchAllData('cost')
     #print c
@@ -183,18 +186,21 @@ if __name__ == "__main__":
 
 
     cmd1 = "SELECT costDate,costName,costValue,comments FROM cost"
-    cmd2 = "SELECT * FROM cost WHERE costDate LIKE '2016-09-07%'"
-    #cmd3 = "SELECT * FROM cost WHERE costDate LIKE '2016-01-10 13:13%'"
-    a = dbo.customizedFetch(cmd1)
+    cmd2 = "SELECT * FROM cost WHERE costDate LIKE '2016-02-03%'"
+    cmd3 = "SELECT * FROM cost WHERE costDate=='2017-10-10 12:12:12'"
+    cmd4 = "select * from cost where costDate=='2016-09-21 13:41:02%'"
+    part = '2016-01-10 13:13'
+    #cmd3 = "SELECT * FROM cost WHERE costDate LIKE \'"+part+"\'%"
+    a = dbo.customizedFetch(cmd3)
     result = []
     result1 = []
     for item in a :
         item = list(item)
         print "listed item : ",item
-        for i in range(len(item)):
-            #print "item["+str(i)+"] before: ",item[i]
+        for i in range(1,len(item)-1):
+            print "item["+str(i)+"] before: ",item[i]
             item[i] = ed.enDecryption.decryption(item[i])
-            #print "item["+str(i)+"] after : ",item[i]
+            print "item["+str(i)+"] after : ",item[i]
         result.append(item)
     print "result : ",result
 '''

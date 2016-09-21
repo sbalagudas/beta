@@ -20,19 +20,38 @@ def getTimeAndWeek():
     itf = "%Y-%m-%d %H:%M:%S"
     return (time.strftime(itf,time.localtime()),time.strftime("%W"))
 
-def getAndConvert():
+def makeCommand(dateDetail):
+    if dateDetail[0] != "" :
+        if dateDetail[1] !=  "" :
+            if dateDetail[2] != "" :
+                return "SELECT * FROM cost WHERE costDate LIKE \'"+str(dateDetail[0])+"-"+str(dateDetail[1])+"-"+str(dateDetail[2])+"%\'"
+            else :
+                return "SELECT * FROM cost WHERE costDate LIKE \'"+str(dateDetail[0])+"-"+str(dateDetail[1])+"%\'"
+        else :
+            return "SELECT * FROM cost WHERE costDate LIKE \'"+str(dateDetail[0])+"%\'"
+
+    else :
+        return "SELECT * FROM cost"
+
+def getAndConvertCostData(dateDetail):
     dbo = DBOperation.DBOperation()
     #rawData = dbo.customizedFetch(sqlCommand)
-    rawData = dbo.fetchAllData('cost')
+    #rawData = dbo.fetchAllData('cost')
+    cmd = makeCommand(dateDetail)
+    rawData = dbo.customizedFetch(cmd)
+
+    (gridData,gridLabel) = decryptionList(rawData)
+    return gridData,gridLabel
+
+def decryptionList(rawData):
     #print "raw data : ",rawData
     gridData = []
     gridLabel = []
-    result1 = []
 
     for item in rawData :
         item = list(item)
         #print "listed item : ",item
-        for i in range(1,len(item)):
+        for i in range(1,len(item)-1):
             item[i] = ed.enDecryption.decryption(item[i])
         gridData.append(item[1:-1])
         gridLabel.append(item[-1:][0])
@@ -43,5 +62,11 @@ def getAndConvert():
 def unicodeToUTF(string):
     return unicode.encode(string)
 
-
+def calculatingTotalCost(costList):
+    moneyList = []
+    #print "costList : ",costList
+    for item in costList:
+        #print "item : ",item
+        moneyList.append(int(item[1]))
+    return sum(moneyList)
 

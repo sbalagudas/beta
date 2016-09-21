@@ -3,7 +3,8 @@ import wx.grid
 import fonts
 import common as cmm
 import dateFilter as df
-import dataSelection as ds
+import enDecryption as ed
+import DBOperation
 
 class basicTable(wx.grid.PyGridTableBase):
     #def __init__(self,tableData,rowLabel=None,colLabel=None):
@@ -61,26 +62,63 @@ class dataPanel(wx.Panel):
         self.dropDown = self.dropDownSelection()
 
 
-        self.layout(self.blackBox,self.dropDown,self.grid)
+        #create totalBox
+        self.createTotalBox(self)
 
-    def layout(self,blackBox,dropDownPanel,gridPanel):
+        self.layout(self.blackBox,self.dropDown,self.grid,self.totalBoxSizer)
+
+    def layout(self,blackBox,dropDownPanel,gridPanel,totalBoxSizer):
         dataPanelSizer = wx.BoxSizer(wx.VERTICAL)
         dataPanelSizer.Add(blackBox,0,wx.EXPAND)
         dataPanelSizer.Add((0,2))
         dataPanelSizer.Add(dropDownPanel,0,wx.EXPAND)
         dataPanelSizer.Add((0,2))
         dataPanelSizer.Add(gridPanel,8,wx.EXPAND)
+        dataPanelSizer.Add(totalBoxSizer,0,wx.EXPAND|wx.ALIGN_CENTER)
         self.SetSizerAndFit(dataPanelSizer)
 
     def createBlackBox(self,parent):
-        blackBox = wx.TextCtrl(parent,-1,"BLACK-BOX...DO NOT TOUCH...")
-        blackBox.SetBackgroundColour("TURQUOISE")
-        blackBox.SetForegroundColour("CADET BLUE")
-        blackBox.SetFont(fonts.Fonts.romanBold12())
-        return blackBox
+        self.blackBox = wx.TextCtrl(parent,id=-1,style=wx.TE_PROCESS_ENTER)
+        self.blackBox.SetValue("BLACK-BOX...DO NOT TOUCH...")
+        self.blackBox.SetBackgroundColour("TURQUOISE")
+        self.blackBox.SetForegroundColour("CADET BLUE")
+        self.blackBox.SetFont(fonts.Fonts.romanBold12())
+        self.Bind(wx.EVT_TEXT_ENTER,self.blackBoxEnter,self.blackBox)
 
-    def createTotal
+        return self.blackBox
 
+    def blackBoxEnter(self,event):
+        command = self.blackBox.GetLabelText()
+        command.strip()
+        if 'costDate' not in command :
+            if 'like' in command or 'LIKE' in command :
+                print "command : ",command
+                varOld = command[command.find('\'')+1 : command.rfind('%')]
+                print "varOld : ",varOld
+            elif '=' in command :
+                varOld = command[command.find('\'')+1 : command.rfind('\'')]
+                print "varOld : ",varOld
+            varNew = ed.enDecryption.encryption(varOld)
+            print "varNew : ",varNew
+            command = command.replace(varOld,varNew)
+        else :
+            pass
+
+        dbo = DBOperation.DBOperation()
+        raw = dbo.customizedFetch(command)
+        (data,label) = cmm.decryptionList(raw)
+        table = basicTable(data,rowLabel=label,colLabel=("Name","Money","Comments"))
+        self.grid.SetTable(table)
+        self.__setGridAttributes()
+        self.Refresh()
+
+    def createTotalBox(self,parent):
+        totalBoxInfo = [("Total : ",wx.ROMAN,'static'),(wx.TE_NOHIDESEL|wx.TE_READONLY,'ctrl'),]
+        (self.totalBoxSizer,self.totalBoxList) = cmm.createStaticTextControl(parent,totalBoxInfo,fonts.Fonts.romanBold14())
+
+    ###################################################################
+    #basic functions for this panel
+    ###################################################################
     def __setGridAttributes(self):
         self.grid.BeginBatch()
         self.grid.SetLabelTextColour('Forest Green')
@@ -89,7 +127,7 @@ class dataPanel(wx.Panel):
         self.grid.SetDefaultCellFont(fonts.Fonts.romanBold10())
 
         self.grid.AutoSizeRows()
-        #self.grid.AutoSizeColumns()
+
         self.grid.EnableEditing(False)
         self.grid.SetLabelBackgroundColour('White')
 
@@ -123,35 +161,58 @@ class dataPanel(wx.Panel):
         self.cbxList[0].SetItems(year)
 
     def dyChangeMonthValue(self,event):
-        (year,month) = self.getYearMonthFromCbx()
-        months = self.timeList[year].keys()
-        months.sort()
-        self.cbxList[1].SetItems(months)
+        (year,month,day) = self.getYearMonthDayFromCbx()
+        if year != '-':
+            months = self.timeList[year].keys()
+            months.sort()
+            self.cbxList[1].SetItems(months)
+            self.cbxList[2].SetItems("")
 
     def dyChangeDateValue(self,event):
-        (year,month) = self.getYearMonthFromCbx()
-        days = self.timeList[year][month]
+        (year,month,day) = self.getYearMonthDayFromCbx()
+        if month != '-' :
+            days = self.timeList[year][month]
+            self.cbxList[2].SetItems(days)
 
-        self.cbxList[2].SetItems(days)
     def nothing(self,event):
         pass
 
-    def getYearMonthFromCbx(self):
+    def getYearMonthDayFromCbx(self):
         yearIndex = self.cbxList[0].GetSelection()
-        year = self.cbxList[0].GetItems()[yearIndex]
-        month = ""
-        try :
+        month = day = ""
+        if yearIndex != wx.NOT_FOUND :
+            year = self.cbxList[0].GetItems()[yearIndex]
+
             monthIndex = self.cbxList[1].GetSelection()
-            month = self.cbxList[1].GetItems()[monthIndex]
-        except IndexError:
-            pass
-        return year,month
+            if monthIndex != wx.NOT_FOUND :
+                month = self.cbxList[1].GetItems()[monthIndex]
+                dayIndex = self.cbxList[2].GetSelection()
+                if dayIndex != wx.NOT_FOUND :
+                    day = self.cbxList[2].GetItems()[dayIndex]
+                else :
+                    day = ""
+            else :
+                month = ""
+                #print "year = %s; month = %s"%(year,month)
+        else :
+            #print "yearIndex : ",yearIndex
+            #print "monthIndex : ",monthIndex
+            year = ""
+        #print "year : %s\nmonth : %s\nday : %s"%(year,month,day)
+        return year,month,day
+
     def searchDataViaButton(self,event):
-        (tableData,tableLabel) = cmm.getAndConvert()
-        print "1111"
+        (year,month,day) = self.getYearMonthDayFromCbx()
+        dateDetail = (year,month,day)
+
+        #getting data from db according to the specified command.
+        (tableData,tableLabel) = cmm.getAndConvertCostData(dateDetail)
+
+        #get the total number of the costs.
+        total = cmm.calculatingTotalCost(tableData)
+        self.totalBoxList[1].SetValue(str(total))
         table = basicTable(tableData,rowLabel=tableLabel,colLabel=("Name","Money","Comments"))
         self.grid.SetTable(table)
-        #self.grid.Refresh()
         self.__setGridAttributes()
         self.Refresh()
 
@@ -159,7 +220,7 @@ class tableGridFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="test frame",pos=(0,0),size=(600,400)):
         wx.Frame.__init__(self,parent,id,title,pos,size)
 
-        (tableData,tableLabel) = cmm.getAndConvert()
+        (tableData,tableLabel) = cmm.getAndConvertCostData()
         self.panel = dataPanel(self,-1,tableData,tableLabel)
 
         width, height = self.GetClientSizeTuple()

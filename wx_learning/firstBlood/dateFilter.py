@@ -7,7 +7,7 @@ class dateFilter():
         cleanedTimeList = []
         dbo = DBOperation.DBOperation()
         dbo.fetchAllData('cost')
-        (gridData,gridLabel) = cmm.getAndConvert()
+        (gridData,gridLabel) = cmm.getAndConvertCostData(("","","",))
 
         for item in gridLabel:
             #print "item : >%s<"%item

@@ -68,7 +68,7 @@ class costPanel(wx.Panel):
             self.costGridToggleList[self.selectedCostType].SetToggle(True)
         else :
             #self.selectedCostType != self.oldCostType :
-            print "set"+self.oldCostType+"to false"
+            #print "set"+self.oldCostType+"to false"
             self.costGridToggleList[self.oldCostType].SetToggle(False)
             self.oldCostType = self.selectedCostType
         self.costFrame = adt.costDataFrame(costName=self.selectedCostType)

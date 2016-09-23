@@ -92,14 +92,15 @@ class dataPanel(wx.Panel):
         command.strip()
         if 'costDate' not in command :
             if 'like' in command or 'LIKE' in command :
-                print "command : ",command
+                #print "command : ",command
                 varOld = command[command.find('\'')+1 : command.rfind('%')]
-                print "varOld : ",varOld
+                #print "varOld : ",varOld
             elif '=' in command :
                 varOld = command[command.find('\'')+1 : command.rfind('\'')]
-                print "varOld : ",varOld
+                #print "varOld : ",varOld
             varNew = ed.enDecryption.encryption(varOld)
-            print "varNew : ",varNew
+            varNew.strip()
+            #print "varNew : ",varNew
             command = command.replace(varOld,varNew)
         else :
             pass
@@ -219,8 +220,8 @@ class dataPanel(wx.Panel):
 class tableGridFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="test frame",pos=(0,0),size=(600,400)):
         wx.Frame.__init__(self,parent,id,title,pos,size)
-
-        (tableData,tableLabel) = cmm.getAndConvertCostData()
+        #(year,month,day) = self.getYearMonthDayFromCbx()
+        #(tableData,tableLabel) = cmm.getAndConvertCostData()
         self.panel = dataPanel(self,-1,tableData,tableLabel)
 
         width, height = self.GetClientSizeTuple()

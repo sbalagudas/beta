@@ -1,11 +1,10 @@
 import wx
-#import paint as pt
-import costPanel as cP
 from DBOperation import DBOperation as dbo
 import time
 import common as cmm
 import fonts
 import Main
+import enDecryption as ed
 
 class logInPanel(wx.Panel):
     #def __init__(self,parent=None,id=-1,title="My Frame"):
@@ -77,19 +76,18 @@ class logInPanel(wx.Panel):
 
     def authentication(self,event):
         db = dbo()
+        #db.initialization()
         #print "self.textList : ",self.textList
         self.userName = self.textList[1].GetLabelText()
-        #print "user name : ",self.userName
+        print "user name : ",self.userName
         password = self.textList[3].GetLabelText()
         dbPwd = db.getBanana(self.userName)
         #need decryption process, will add later.
         if dbPwd :
-            if dbPwd[0][0] == password:
+            if ed.enDecryption.decryption(dbPwd[0][0]) == password:
                 self.pmt.SetLabel("log in success!")
                 time.sleep(1)
                 self.frame.Destroy()
-                #self.paintWindow = pt.paintFrame()
-                #self.cPanel = cP.costFrame()
                 self.mainFrame = Main.mainFrame()
                 self.mainFrame.Show()
             else :

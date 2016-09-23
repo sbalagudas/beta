@@ -1,16 +1,33 @@
 import sqlite3 as sql
-import time
+import common as cmm
 import enDecryption as ed
 
 
 class DBOperation(object) :
     DB_DIR = "d:\\dbTest.db"
     def __init__(self):
-        self.conn = sql.connect(self.DB_DIR)
+        try :
+            self.conn = sql.connect(self.DB_DIR)
+        except Exception as e:
+            print e
         self.cursor = self.conn.cursor()
         self.createTable('user')
-        self.createTable('cost')
+        #self.createTable('cost')
+        #self.initialization()
     #@staticmethod
+
+    def initialization(self):
+        banana = 'sophia'
+        apple = 'xfgcj1314'
+        banana = ed.enDecryption.encryption(banana)
+        apple = ed.enDecryption.encryption(apple)
+        banana.strip()
+        apple.strip()
+        t = cmm.getTimeAndWeek()[0]
+        initCommand = "INSERT INTO user(username,password,regDate) SELECT \'"+banana+"\',\'"+apple+"\',\'"+t+"\' WHERE NOT EXISTS (SELECT * FROM user WHERE username=\'"+banana+"\')"
+        return initCommand
+
+
     def closeConnection(self,conn):
         conn.close()
 
@@ -27,11 +44,24 @@ class DBOperation(object) :
 
     #@staticmethod
     def createTable(self,tableName):
-        if tableName == 'user' :
-            createTBCommand = "CREATE TABLE IF NOT EXISTS "+ str(tableName)+ self.TBUserInfo
-        elif tableName == 'cost':
-            createTBCommand = "CREATE TABLE IF NOT EXISTS "+ str(tableName)+ self.TBCostInfo
-        self.cursor.execute(createTBCommand)
+        try :
+            if tableName == 'user' :
+                createTBCommand = "CREATE TABLE IF NOT EXISTS "+ str(tableName)+ self.TBUserInfo
+            elif tableName == 'cost':
+                createTBCommand = "CREATE TABLE IF NOT EXISTS "+ str(tableName)+ self.TBCostInfo
+            initCommand = self.initialization()
+            print "init Command : ",initCommand
+            self.cursor.execute(createTBCommand)
+            #self.conn.commit()
+            self.conn = sql.connect(self.DB_DIR)
+            print "executing initCommand"
+            #self.cursor.execute(initCommand)
+            self.customizedFetch(initCommand)
+            r = self.fetchAllData('user')
+            print "r : ",r
+        except :
+            self.closeConnection(self.conn)
+
 
     #@staticmethod
     def dropTable(self,tableName):
@@ -46,34 +76,29 @@ class DBOperation(object) :
         elif "cost" == tableName :
             insertCommand = "INSERT INTO " + str(tableName) + " (costName,costValue,comments,costDate)" + " values (?,?,?,?)"
         self.cursor.execute(insertCommand,value)
-        print "[DBO.insertData] : command <%s> executed...[ %s ]"%(insertCommand,value)
+
         self.conn.commit()
 
     #@staticmethod
     def fetchAllData(self,tableName):
         fetchAllCommand = "SELECT * FROM "+tableName
-        self.cursor.execute(fetchAllCommand)
+        print "fetchAllCommand : ",fetchAllCommand
         self.cursor.execute(fetchAllCommand)
         return self.cursor.fetchall()
 
     #@staticmethod
     def customizedFetch(self,cmd):
-        print "command <%s> executing !"%cmd
         self.cursor.execute(cmd)
-        print "command <%s> executed !"%cmd
+        self.conn.commit()
         return self.cursor.fetchall()
     #@classmethod
     def getBanana(self,key):
         getBananaCommand = "SELECT password FROM user WHERE userName='"+str(key)+"'"
-        #print "command <%s> executed !"%getBananaCommand
         self.cursor.execute(getBananaCommand)
         raw = self.cursor.fetchall()
-        #print "raw : ",raw
         return raw
 
-if __name__ == "__main__":
-    #pass
-
+if __name__ == "__main__" :
     itf = "%Y-%m-%d %H:%M:%S"
     dbo = DBOperation()
 

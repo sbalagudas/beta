@@ -3,7 +3,7 @@ import timeDisplay
 import common as cmm
 import costPanel as cP
 import login
-import time
+import os
 import tableGrid
 
 class mainFrame(wx.Frame):
@@ -23,7 +23,7 @@ class mainFrame(wx.Frame):
         #self.tableFrame = tableGrid.tableGridFrame()
         #self.tableGrid.Refresh()
         (width, height) = self.GetClientSizeTuple()
-        print "w,h : %s,%s"%(width,height)
+        #print "w,h : %s,%s"%(width,height)
         self.tableGrid.grid.SetDefaultColSize((width-253)/4.0,True)
         self.tableGrid.grid.SetRowLabelSize((width-253)/4.6)
 
@@ -49,7 +49,7 @@ class mainFrame(wx.Frame):
 
 
 class mainApp(wx.App):
-    def __init__(self,redirect=False,filename=None):
+    def __init__(self,redirect=False,filename=str(os.getcwd())+'main.txt'):
         wx.App.__init__(self,redirect,filename)
     def OnInit(self):
         frame = mainFrame()

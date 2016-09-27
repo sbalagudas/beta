@@ -12,7 +12,7 @@ class DBOperation(object) :
             print e
         self.cursor = self.conn.cursor()
         self.createTable('user')
-        #self.createTable('cost')
+        self.createTable('cost')
         #self.initialization()
     #@staticmethod
 

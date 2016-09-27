@@ -153,10 +153,13 @@ class dataPanel(wx.Panel):
             self.cbxList.append(cbx)
         self.cbSizer.Add(submitButton,1)
         #self.SetSizer(self.cbSizer)
-        self.initYear()
+        print "self.timeList000 : ",self.timeList
+        if self.timeList :
+            self.initYear()
         return self.cbSizer
 
     def initYear(self):
+
         year = self.timeList.keys()
         year.sort()
         self.cbxList[0].SetItems(year)
@@ -216,6 +219,11 @@ class dataPanel(wx.Panel):
         self.grid.SetTable(table)
         self.__setGridAttributes()
         self.Refresh()
+        print "self.timeList111 : ",self.timeList
+        if not self.timeList:
+            self.timeList = df.dateFilter.getTimeList()
+            print "self.timeList222 : ",self.timeList
+            self.initYear()
 
 class tableGridFrame(wx.Frame):
     def __init__(self,parent=None,id=-1,title="test frame",pos=(0,0),size=(600,400)):

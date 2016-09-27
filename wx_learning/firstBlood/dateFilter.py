@@ -6,8 +6,11 @@ class dateFilter():
     def getAllRawData(self):
         cleanedTimeList = []
         dbo = DBOperation.DBOperation()
-        dbo.fetchAllData('cost')
-        (gridData,gridLabel) = cmm.getAndConvertCostData(("","","",))
+        try :
+            dbo.fetchAllData('cost')
+            (gridData,gridLabel) = cmm.getAndConvertCostData(("","","",))
+        except :
+            gridLabel = ""
 
         for item in gridLabel:
             #print "item : >%s<"%item

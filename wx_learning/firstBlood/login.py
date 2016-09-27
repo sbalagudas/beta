@@ -79,11 +79,16 @@ class logInPanel(wx.Panel):
         #db.initialization()
         #print "self.textList : ",self.textList
         self.userName = self.textList[1].GetLabelText()
-        print "user name : ",self.userName
+        #print "user name : ",self.userName
         password = self.textList[3].GetLabelText()
-        dbPwd = db.getBanana(self.userName)
+        #print "password : ",password
+        enUserName = ed.enDecryption.encryption(self.userName)
+        enUserName.strip()
+        dbPwd = db.getBanana(enUserName)
+
         #need decryption process, will add later.
         if dbPwd :
+            #print "ed.enDecryption.decryption(dbPwd[0][0])",ed.enDecryption.decryption(dbPwd[0][0])
             if ed.enDecryption.decryption(dbPwd[0][0]) == password:
                 self.pmt.SetLabel("log in success!")
                 time.sleep(1)

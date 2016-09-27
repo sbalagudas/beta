@@ -50,15 +50,15 @@ class DBOperation(object) :
             elif tableName == 'cost':
                 createTBCommand = "CREATE TABLE IF NOT EXISTS "+ str(tableName)+ self.TBCostInfo
             initCommand = self.initialization()
-            print "init Command : ",initCommand
+            #print "init Command : ",initCommand
             self.cursor.execute(createTBCommand)
             #self.conn.commit()
-            self.conn = sql.connect(self.DB_DIR)
-            print "executing initCommand"
-            #self.cursor.execute(initCommand)
+            #self.conn = sql.connect(self.DB_DIR)
+            #print "executing initCommand"
+            self.cursor.execute(initCommand)
             self.customizedFetch(initCommand)
             r = self.fetchAllData('user')
-            print "r : ",r
+            #print "r : ",r
         except :
             self.closeConnection(self.conn)
 
@@ -82,7 +82,7 @@ class DBOperation(object) :
     #@staticmethod
     def fetchAllData(self,tableName):
         fetchAllCommand = "SELECT * FROM "+tableName
-        print "fetchAllCommand : ",fetchAllCommand
+        #print "fetchAllCommand : ",fetchAllCommand
         self.cursor.execute(fetchAllCommand)
         return self.cursor.fetchall()
 
@@ -94,6 +94,7 @@ class DBOperation(object) :
     #@classmethod
     def getBanana(self,key):
         getBananaCommand = "SELECT password FROM user WHERE userName='"+str(key)+"'"
+        #print "command <%s> executed..."%getBananaCommand
         self.cursor.execute(getBananaCommand)
         raw = self.cursor.fetchall()
         return raw

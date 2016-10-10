@@ -7,8 +7,6 @@ import Main
 import enDecryption as ed
 
 class logInPanel(wx.Panel):
-    #def __init__(self,parent=None,id=-1,title="My Frame"):
-    #    wx.Frame.__init__(self,parent,id,title)
     def __init__(self,
                  parent,
                  ID,
@@ -17,62 +15,45 @@ class logInPanel(wx.Panel):
         wx.Panel.__init__(self,parent,ID,pos,size)
         self.frame = parent
 
-        #self.paintWindow = wx.Panel(self,-1)
-
-        #self.SetBackgroundColour("TURQUOISE")
+        #self.backgroundImage()
         self.fontBold = wx.Font(18,wx.ROMAN,wx.ITALIC,wx.BOLD)
         self.bgColor = self.GetBackgroundColour()
 
         self.createLoginButton()
         self.createPromptText()
-        #(textSizer,self.textList) = self.createText(self.textInfo())
+
         (textSizer,self.textList) = cmm.createStaticTextControl(self,self.textInfo(),fonts.Fonts.romanBold16())
+        for item in self.textList:
+            item.SetForegroundColour('Blue')
+        self.SetBackgroundColour('#CCFFCC')
         self.layout(textSizer)
 
     def createLoginButton(self):
         self.loginBtn = wx.Button(self,label="Log In",size=(100,50))
-        self.loginBtn.SetFont(self.fontBold)
+        self.loginBtn.SetFont(fonts.Fonts.romanBold18())
+        self.loginBtn.SetForegroundColour('Blue')
         self.loginBtn.Bind(wx.EVT_BUTTON,self.authentication,self.loginBtn)
     def createPromptText(self):
         self.pmt = wx.StaticText(self,id=-1,label="",size=(400,50))
         self.pmt.SetFont(self.fontBold)
         self.pmt.SetForegroundColour('RED')
 
-    def loginCheck(self,event,userName,password):
-        pass
-
     def textInfo(self):
         return [("User Name : ",wx.ROMAN,'static'),
                 (wx.TE_NOHIDESEL,'ctrl'),
                 ("Password : ",wx.ROMAN,'static'),
-                (wx.TE_PASSWORD,'ctrl')]
+                (wx.TE_PASSWORD|wx.TE_PROCESS_ENTER,'ctrl')]
 
     def layout(self,textSizer):
         boxSizer = wx.BoxSizer(wx.VERTICAL)
+        boxSizer.Add((0,20))
         boxSizer.Add(textSizer,1,wx.EXPAND|wx.ALL,5)
         boxSizer.Add(self.pmt,0,wx.ALIGN_CENTER|wx.EXPAND,5)
         boxSizer.Add(self.loginBtn,0,wx.ALIGN_CENTER|wx.ALL,5)
+        boxSizer.Add((0,20))
 
         self.SetSizer(boxSizer)
         self.Layout()
-
-
-    def createText(self,textData):
-        sizer = wx.FlexGridSizer(cols=2,hgap=6,vgap=6)
-        textList = []
-        for eachItem in textData:
-            if 'static' in eachItem :
-                text = wx.StaticText(self,id=-1,label=eachItem[0],style=eachItem[1])
-                text.SetForegroundColour('MEDIUM SPRING GREEN')
-            else :
-                text = wx.TextCtrl(self,id=-1,size=(200,-1),style=eachItem[0])
-                text.SetForegroundColour('BLACK')
-            text.SetFont(self.fontBold)
-            text.SetBackgroundColour(self.bgColor)
-            textList.append(text)
-        sizer.AddMany(textList)
-        #self.paintWindow.SetSizer(sizer)
-        return sizer,textList
 
     def authentication(self,event):
         db = dbo()

@@ -16,18 +16,24 @@ class mainFrame(wx.Frame):
                  size=(900,600),
                  style=wx.DEFAULT_FRAME_STYLE^(wx.RESIZE_BORDER | wx.MINIMIZE_BOX |wx.MAXIMIZE_BOX)):
         wx.Frame.__init__(self,parent,id,title,pos,size,style)
-
-        self.panelTime = timeDisplay.timeDisplay(self,-1,'apple')
+        self.panelTime = timeDisplay.timeDisplay(self,-1,'Sophia')
         self.cost = cP.costPanel(self,-1)
         self.tableGrid = tableGrid.dataPanel(self,-1,'','')
-        #self.tableFrame = tableGrid.tableGridFrame()
-        #self.tableGrid.Refresh()
         (width, height) = self.GetClientSizeTuple()
-        #print "w,h : %s,%s"%(width,height)
         self.tableGrid.grid.SetDefaultColSize((width-253)/4.0,True)
         self.tableGrid.grid.SetRowLabelSize((width-253)/4.6)
 
+        #set UI colors
+        #ADEAEA,'#66CCCC'
+        self.colorSet = ['#CCFFCC',"#CCFFCC"]
+        self.changeUIColor(self.colorSet)
+
         self.layout(self.panelTime,self.cost,self.tableGrid)
+
+    def changeUIColor(self,colorSet):
+        self.panelTime.SetBackgroundColour(colorSet[0])
+        self.cost = cP.costPanel(self,-1,colorSet[1])
+        #self.Refresh()
 
     def updateTableGrid(self,event):
         (tableData,tableLabel) = cmm.getAndConvert()

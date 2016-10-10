@@ -10,8 +10,15 @@ class costDataFrame(wx.Frame):
         wx.Frame.__init__(self,parent,id,title,pos,size)
         self.costNameForDB = costName
         (sizer,self.textList) = cmm.createStaticTextControl(self,self.costDataInfo(costName),fonts.Fonts.romanBold12())
+        self.textList[3].SetBackgroundColour('#CCFFCC')
+        self.textList[5].SetBackgroundColour('#CCFFCC')
+        self.textList[5].SetBackgroundColour('#CCFFCC')
+        for i in range(0,6):
+            self.textList[i].SetForegroundColour('Blue')
+        self.textList[6].SetForegroundColour('Red')
         buttonSizer = self.costDataButtons()
         self.SetBackgroundColour("White")
+        self.SetBackgroundColour('#CCFFCC')
         self.layout(sizer,buttonSizer)
 
 
@@ -39,10 +46,16 @@ class costDataFrame(wx.Frame):
         costDataSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         costDataBtnAdd = wx.Button(self,label="Add",size=(100,50))
+        costDataBtnAdd.SetForegroundColour('Blue')
+        costDataBtnAdd.SetBackgroundColour('#CCFFCC')
+        costDataBtnAdd.SetFont(fonts.Fonts.romanBold12())
         self.Bind(wx.EVT_BUTTON,self.onAddCost,costDataBtnAdd)
 
         costDataBtnCancel = wx.Button(self,label="Cancel",size=(100,50))
         self.Bind(wx.EVT_BUTTON,self.onCancel,costDataBtnCancel)
+        costDataBtnCancel.SetForegroundColour('Blue')
+        costDataBtnCancel.SetBackgroundColour('#CCFFCC')
+        costDataBtnCancel.SetFont(fonts.Fonts.romanBold12())
 
         costDataSizer.Add(costDataBtnAdd,1,wx.ALIGN_BOTTOM|wx.EXPAND,10)
         costDataSizer.Add((50,0))
@@ -56,6 +69,7 @@ class costDataFrame(wx.Frame):
             value = value[:str(value).rfind('.')]
         if not str(value).isdigit() or 0 == len(str(value)):
             self.textList[6].SetLabel("value should be numbers...")
+
         else :
             name = ed.enDecryption.encryption(self.costNameForDB)
             value = ed.enDecryption.encryption(value)

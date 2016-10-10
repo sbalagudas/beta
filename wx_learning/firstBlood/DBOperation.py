@@ -1,10 +1,12 @@
 import sqlite3 as sql
 import common as cmm
 import enDecryption as ed
-
+import os
 
 class DBOperation(object) :
-    DB_DIR = "d:\\dbTest.db"
+    cwd = os.getcwd()
+    DB_DIR = str(cwd)+os.sep+'unicorn.db'
+
     def __init__(self):
         try :
             self.conn = sql.connect(self.DB_DIR)

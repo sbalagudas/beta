@@ -11,11 +11,11 @@ class testPanel(wx.Panel):
 
 class costPanel(wx.Panel):
     COLS_NUM = 3
-    def __init__(self,parent,id=-1):
+    def __init__(self,parent,id=-1,color='White'):
         wx.Panel.__init__(self,parent,id)
 
-        costGrid = self.createCostGrid()
-        costButtonGrid = self.createCostButtonGrid()
+        costGrid = self.createCostGrid(color)
+        costButtonGrid = self.createCostButtonGrid(color)
 
         self.oldCostType = 'Meal'
         self.layout(costGrid,costButtonGrid)
@@ -34,7 +34,7 @@ class costPanel(wx.Panel):
     def costButtonInfo(self):
         return ["Daily Data","Monthly Data","Yearly Data"]
 
-    def createCostGrid(self):
+    def createCostGrid(self,color):
         self.costGridDict = {}
         self.costGridToggleList = {}
         costGrid = wx.GridSizer(cols=self.COLS_NUM,hgap=5,vgap=5)
@@ -43,19 +43,23 @@ class costPanel(wx.Panel):
             button = buttons.GenToggleButton(self,id=-1,label=str(eachCost),size=(80,80))
             button.SetBezelWidth(3)
             button.SetUseFocusIndicator(False)
+            button.SetForegroundColour('Blue')
+            button.SetBackgroundColour(color)
             self.Bind(wx.EVT_BUTTON,self.callAddCost,button)
-            button.SetFont(fonts.Fonts.romanBold14())
+            button.SetFont(fonts.Fonts.romanBold12())
             costGrid.Add(button,1)
             self.costGridDict[button.GetId()] = eachCost
             self.costGridToggleList[eachCost] = button
         #self.costGridToggleList[self.costCategory()[0]]
         return costGrid
 
-    def createCostButtonGrid(self):
+    def createCostButtonGrid(self,color):
         #costSizer = wx.GridSizer(cols=1)
         costSizer = wx.BoxSizer(wx.VERTICAL)
         for eachData in self.costButtonInfo():
-            button  = wx.Button(self,id=-1,label=eachData)
+            button  = wx.Button(self,id=-1,label=eachData,style=wx.NO_BORDER)
+            button.SetForegroundColour('Blue')
+            button.SetBackgroundColour(color)
             button.SetFont(fonts.Fonts.romanBold16())
             costSizer.Add(button,1,wx.EXPAND)
         return costSizer

@@ -2,6 +2,7 @@ import wx
 import time
 import enDecryption as ed
 import DBOperation
+import fonts
 
 def createStaticTextControl(parent,textInfo,font):
     sizer = wx.FlexGridSizer(cols=2,hgap=6,vgap=6)
@@ -12,7 +13,7 @@ def createStaticTextControl(parent,textInfo,font):
         else :
             text = wx.TextCtrl(parent,id=-1,size=(250,-1),style=eachItem[0])
         textList.append(text)
-        text.SetFont(font)
+        text.SetFont(fonts.Fonts.swissArial10())
         sizer.Add(text,0,wx.EXPAND|wx.ALL,10)
     return sizer,textList
 
@@ -69,4 +70,7 @@ def calculatingTotalCost(costList):
         #print "item : ",item
         moneyList.append(int(item[1]))
     return sum(moneyList)
+def getCurUser():
+    command = "select * from user"
+    pass
 

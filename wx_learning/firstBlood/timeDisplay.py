@@ -14,9 +14,10 @@ class timeDisplay(wx.Panel):
         self.curTime = cmm.getTimeAndWeek()
 
         #multi-threading
-        #wx.CallAfter(self.refreshTime)
         thd = threading.Thread(target=self.refreshTime,args=())
         self.createStaticText()
+        if not callable(self):
+            return
         thd.start()
 
     def TextInfo(self):
@@ -34,7 +35,7 @@ class timeDisplay(wx.Panel):
         for eachItem in self.TextInfo():
             text = wx.StaticText(self,id=-1,label=str(eachItem),style=wx.ROMAN|wx.ALIGN_CENTER)
             text.SetForegroundColour('Blue')
-            text.SetBackgroundColour(self.GetBackgroundColour())
+            #text.SetBackgroundColour(self.GetBackgroundColour())
             #text.SetBackgroundColour(self.titleColorInfo()[i])
             text.SetFont(fonts.Fonts.romanBold22())
 

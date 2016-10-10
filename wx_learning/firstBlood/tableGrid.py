@@ -79,8 +79,8 @@ class dataPanel(wx.Panel):
 
     def createBlackBox(self,parent):
         self.blackBox = wx.TextCtrl(parent,id=-1,style=wx.TE_PROCESS_ENTER)
-        self.blackBox.SetValue("BLACK-BOX...DO NOT TOUCH...")
-        self.blackBox.SetBackgroundColour("TURQUOISE")
+        self.blackBox.SetValue("...BLACK-BOX...")
+        #self.blackBox.SetBackgroundColour("TURQUOISE")
         self.blackBox.SetForegroundColour("CADET BLUE")
         self.blackBox.SetFont(fonts.Fonts.romanBold12())
         self.Bind(wx.EVT_TEXT_ENTER,self.blackBoxEnter,self.blackBox)
@@ -116,6 +116,8 @@ class dataPanel(wx.Panel):
     def createTotalBox(self,parent):
         totalBoxInfo = [("Total : ",wx.ROMAN,'static'),(wx.TE_NOHIDESEL|wx.TE_READONLY,'ctrl'),]
         (self.totalBoxSizer,self.totalBoxList) = cmm.createStaticTextControl(parent,totalBoxInfo,fonts.Fonts.romanBold14())
+        self.totalBoxList[0].SetForegroundColour('Blue')
+        self.totalBoxList[1].SetForegroundColour('Blue')
 
     ###################################################################
     #basic functions for this panel
@@ -126,11 +128,14 @@ class dataPanel(wx.Panel):
         self.grid.SetDefaultCellTextColour('Blue')
         self.grid.SetDefaultCellAlignment(wx.ALIGN_CENTER,wx.ALIGN_BOTTOM)
         self.grid.SetDefaultCellFont(fonts.Fonts.romanBold10())
+        self.grid.SetDefaultCellBackgroundColour('#CCFFCC')
+        self.grid.SetLabelBackgroundColour('#CCFFCC')
+        self.grid.SetBackgroundColour('Black')
 
         self.grid.AutoSizeRows()
-
         self.grid.EnableEditing(False)
-        self.grid.SetLabelBackgroundColour('White')
+        #self.grid.SetLabelBackgroundColour('Red')
+        self.Refresh()
 
     def dropDownSelection(self):
                 #local variable declaration.
@@ -142,6 +147,8 @@ class dataPanel(wx.Panel):
 
         #create the submit button.
         submitButton = wx.Button(self,id=-1,label="Submit")
+        submitButton.SetForegroundColour('Blue')
+        submitButton.SetFont(fonts.Fonts.swissArial10())
         self.Bind(wx.EVT_BUTTON,self.searchDataViaButton,submitButton)
         #create combox and add them to sizer
         self.cbSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -149,6 +156,9 @@ class dataPanel(wx.Panel):
         for i in range(3):
             cbx = wx.ComboBox(parent=self,id=-1,value=cbxDefaultValue[i][0],choices='',style=wx.CB_DROPDOWN,name=cbxDefaultValue[i][0])
             self.Bind(wx.EVT_COMBOBOX,cbxDefaultValue[i][1],cbx)
+            #cbx.SetBackgroundColour('#66CCCC')
+            cbx.SetFont(fonts.Fonts.swissArial10())
+            cbx.SetForegroundColour('Blue')
             self.cbSizer.Add(cbx,1,wx.EXPAND)
             self.cbxList.append(cbx)
         self.cbSizer.Add(submitButton,1)
@@ -159,10 +169,12 @@ class dataPanel(wx.Panel):
         return self.cbSizer
 
     def initYear(self):
-
-        year = self.timeList.keys()
-        year.sort()
-        self.cbxList[0].SetItems(year)
+        try :
+            year = self.timeList.keys()
+            year.sort()
+            self.cbxList[0].SetItems(year)
+        except AttributeError:
+            pass
 
     def dyChangeMonthValue(self,event):
         (year,month,day) = self.getYearMonthDayFromCbx()
@@ -219,10 +231,10 @@ class dataPanel(wx.Panel):
         self.grid.SetTable(table)
         self.__setGridAttributes()
         self.Refresh()
-        print "self.timeList111 : ",self.timeList
+        #print "self.timeList111 : ",self.timeList
         if not self.timeList:
             self.timeList = df.dateFilter.getTimeList()
-            print "self.timeList222 : ",self.timeList
+            #print "self.timeList222 : ",self.timeList
             self.initYear()
 
 class tableGridFrame(wx.Frame):

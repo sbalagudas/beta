@@ -9,6 +9,7 @@ import datetime
 #file_name = "/storage/emulated/0/com.hipipal.qpyplus/cost/cost.txt"
 file_name = "/storage/emulated/0/com.hipipal.qpyplus/cost/tailand.txt"
 #file_name = "c:\\Python27\\cost.txt"
+#branch test... 
 class Cost(object):
     def Check_Null(self,value):
         if 0 == len(value):

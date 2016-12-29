@@ -241,7 +241,7 @@ class Cost(object):
         mon = []
         t_mon = self.Get_Time_List()
         t_mon = map(lambda x:x[:-3],t_mon)
-        #print "t_mon : ",t_mon
+        #print "t_mon : %s"%t_mon
 
         #map(lambda x:mon.append(x),[n for n in t_mon if n not in mon])
         mon = list(set(t_mon)) #remove the duplicated values from the list
